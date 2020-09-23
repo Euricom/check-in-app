@@ -28,7 +28,7 @@ export class EventService {
       },
       {
         id: 4,
-        eventName: 'NGBE',
+        eventName: 'NG-BE',
         startDate: 'startDate',
         endDate: 'endDate',
       },
