@@ -13,18 +13,9 @@ const routes: Routes = [
       import('./events/events.module').then((m) => m.EventsPageModule),
   },
   {
-    path: 'checked-in',
+    path: 'event',
     loadChildren: () =>
-      import('./checked-in/checked-in.module').then(
-        (m) => m.CheckedInPageModule,
-      ),
-  },
-  {
-    path: 'subscribed',
-    loadChildren: () =>
-      import('./subscribed/subscribed.module').then(
-        (m) => m.SubscribedPageModule,
-      ),
+      import('./event/event.module').then((m) => m.EventPageModule),
   },
 ];
 

@@ -4,17 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { SubscribedPageRoutingModule } from './subscribed-routing.module';
+import { EventPageRoutingModule } from './event-routing.module';
 
-import { SubscribedPage } from './subscribed.page';
+import { EventPage } from './event.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    SubscribedPageRoutingModule
+    EventPageRoutingModule
   ],
-  declarations: [SubscribedPage]
+  declarations: [EventPage]
 })
-export class SubscribedPageModule {}
+export class EventPageModule {}
