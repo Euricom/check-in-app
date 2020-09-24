@@ -1,0 +1,63 @@
+{
+  "events": [
+    {
+      "id": 1,
+      "eventName": "Dev Cruise",
+      "startDate": "startDate",
+      "endDate": "endDate",
+      "users": [
+        { "id": 1, "checkedIn": false },
+        { "id": 2, "checkedIn": false },
+        { "id": 3, "checkedIn": false }
+      ]
+    },
+    {
+      "id": 2,
+      "eventName": "Boottocht",
+      "startDate": "startDate",
+      "endDate": "endDate",
+      "users": [{ "id": 1, "checkedIn": false }]
+    },
+    {
+      "id": 3,
+      "eventName": "Karting",
+      "startDate": "startDate",
+      "endDate": "endDate",
+      "users": [
+        { "id": 1, "checkedIn": false },
+        { "id": 2, "checkedIn": false }
+      ]
+    },
+    {
+      "id": 4,
+      "eventName": "NG-BE",
+      "startDate": "startDate",
+      "endDate": "endDate",
+      "users": [
+        { "id": 2, "checkedIn": false },
+        { "id": 3, "checkedIn": false }
+      ]
+    }
+  ],
+
+  "users": [
+    {
+      "id": 1,
+      "firstName": "Adil",
+      "lastName": "Khan",
+      "phoneNumber": "0489474220"
+    },
+    {
+      "id": 2,
+      "firstName": "Koen",
+      "lastName": "Vercauteren",
+      "phoneNumber": "0489474220"
+    },
+    {
+      "id": 3,
+      "firstName": "Thomas",
+      "lastName": "Claessens",
+      "phoneNumber": "0489474220"
+    }
+  ]
+}

@@ -10,11 +10,19 @@ import { Component, OnInit } from '@angular/core';
 export class EventsPage implements OnInit {
   constructor(private eventService: EventService, private router: Router) {}
 
-  events = this.eventService.getAll();
+  events = [];
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.eventService.getAll().subscribe((res) => {
+      this.events = res;
+    });
+  }
 
-  goDetail(): void {
-    this.router.navigate(['event']);
+  goDetail(id): void {
+    this.router.navigate(['event', id]);
+  }
+
+  onDelete(id): void {
+    this.eventService.delete(id);
   }
 }

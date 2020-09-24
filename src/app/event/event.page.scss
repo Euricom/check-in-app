@@ -1,0 +1,47 @@
+.segment {
+  background-color: white;
+  padding: 10px 15px;
+  flex-grow: 2;
+  text-align: center;
+
+  &:first-of-type {
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+  }
+
+  &:last-of-type {
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+  }
+
+  &--selected {
+    background-color: orange;
+    color: white;
+    font-weight: 600;
+  }
+
+  &__bar {
+    display: flex;
+  }
+
+  &__container {
+    padding: 10px 20px;
+  }
+
+  &__counters {
+    display: flex;
+    justify-content: space-around;
+    padding: 15px 0;
+
+    .count {
+      color: white;
+      font-weight: 600;
+      font-size: 20px;
+      display: flex;
+    }
+  }
+}
+
+.banner {
+  background-color: rgb(34, 138, 207);
+}
