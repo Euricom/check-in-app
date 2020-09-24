@@ -16,6 +16,21 @@ export class EventService {
   }
 
   delete(id): any {
-    this.http.delete(`api/events/${id}`);
+    this.http.delete(`api/events/${id}`).subscribe();
+  }
+
+  create(event?) {
+    event = {
+      // id: 1,
+      eventName: 'Event',
+      startDate: '22/09/2020',
+      endDate: '',
+      users: [
+        { id: 1, checkedIn: false },
+        { id: 2, checkedIn: false },
+        { id: 3, checkedIn: false },
+      ],
+    };
+    this.http.post(`api/events`, event).subscribe();
   }
 }

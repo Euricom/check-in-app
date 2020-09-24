@@ -13,6 +13,10 @@ export class EventsPage implements OnInit {
   events = [];
 
   ngOnInit() {
+    this.populateList();
+  }
+
+  populateList(): void {
     this.eventService.getAll().subscribe((res) => {
       this.events = res;
     });
@@ -23,6 +27,13 @@ export class EventsPage implements OnInit {
   }
 
   onDelete(id): void {
+    console.log('delete ' + id);
     this.eventService.delete(id);
+    this.populateList();
+  }
+
+  createEvent() {
+    this.eventService.create();
+    this.populateList();
   }
 }
