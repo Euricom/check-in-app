@@ -14,8 +14,10 @@ export class EventPage implements OnInit {
     eventName: 'Event',
   };
   users = [];
+  checkedInUsers = [];
   checkedIn = 0;
   subscribed = 0;
+  subscribedVisibility = true;
 
   constructor(
     private eventService: EventService,
@@ -32,6 +34,7 @@ export class EventPage implements OnInit {
   getEvent(id): void {
     this.eventService.getById(id).subscribe((res) => {
       this.event = res;
+
       if (res.users && res.users.length !== 0) {
         this.getEventUsers(res.users);
         this.subscribed = res.users.length;
@@ -39,11 +42,19 @@ export class EventPage implements OnInit {
     });
   }
 
+  showSubscribed(e) {
+    this.subscribedVisibility = e;
+  }
+
   // TODO remove once API returns complete event w users
   getEventUsers(users): void {
     users.forEach((user) => {
       this.userService.getById(user.id).subscribe((res) => {
-        this.users.push(res);
+        this.users.push({ ...res, checkedIn: user.checkedIn });
+        this.checkedInUsers = this.users.filter((u) => {
+          return u.checkedIn === true;
+        });
+        this.checkedIn = this.checkedInUsers.length;
       });
     });
   }

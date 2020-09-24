@@ -16,18 +16,43 @@
       </div>
 
       <div class="segment__bar">
-        <div class="segment segment--selected">Subscribed</div>
-        <div class="segment">Checked In</div>
+        <div
+          class="segment"
+          (click)="showSubscribed(true)"
+          [ngClass]="{'segment--selected' : subscribedVisibility}"
+        >
+          Subscribed
+        </div>
+        <div
+          class="segment"
+          (click)="showSubscribed(false)"
+          [ngClass]="{'segment--selected' : !subscribedVisibility}"
+        >
+          Checked In
+        </div>
       </div>
     </div>
   </div>
 
-  <ion-list *ngFor="let user of users">
-    <ion-item>
-      <ion-label>
-        <h2>{{ user.firstName }} {{ user.lastName }}</h2>
-        <p>Euricom</p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+  <ng-container *ngIf="subscribedVisibility">
+    <ion-list *ngFor="let user of users">
+      <ion-item>
+        <ion-label>
+          <h2>{{ user.firstName }} {{ user.lastName }}</h2>
+          <p>Euricom</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+
+  <ng-container *ngIf="!subscribedVisibility">
+    <ion-list *ngFor="let user of checkedInUsers">
+      <ion-item>
+        <ion-label>
+          <h2>{{ user.firstName }} {{ user.lastName }}</h2>
+          <p>Euricom</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ng-container>
 </ion-content>
