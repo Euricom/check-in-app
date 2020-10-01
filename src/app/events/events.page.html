@@ -18,8 +18,8 @@
         </ion-item-option>
       </ion-item-options>
       <ion-item>
-        <ion-label (click)="goDetail(event.id)">
-          <h2>{{ event.eventName }}</h2>
+        <ion-label (click)="goDetail(event.eventId)">
+          <h2>{{ event.name }}</h2>
           <p>
             {{ event.startDate }} {{ event.endDate? "- " + event.endDate : "" }}
           </p>

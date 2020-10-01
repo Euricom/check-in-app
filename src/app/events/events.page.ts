@@ -18,7 +18,8 @@ export class EventsPage implements OnInit {
 
   populateList(): void {
     this.eventService.getAll().subscribe((res) => {
-      this.events = res;
+      console.log(res.items);
+      this.events = res.items;
     });
   }
 

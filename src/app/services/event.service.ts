@@ -8,7 +8,7 @@ export class EventService {
   constructor(private http: HttpClient) {}
 
   getAll(): any {
-    return this.http.get(`api/events`);
+    return this.http.get(`api/EventsGet`);
   }
 
   getById(id): any {
