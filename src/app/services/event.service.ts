@@ -8,15 +8,15 @@ export class EventService {
   constructor(private http: HttpClient) {}
 
   getAll(): any {
-    return this.http.get(`api/EventsGet`);
+    return this.http.get(`api/events`);
   }
 
   getById(id): any {
-    return this.http.get(`api/events/${id}`);
+    return this.http.get(`api/event/${id}`);
   }
 
   delete(id): any {
-    this.http.delete(`api/events/${id}`).subscribe();
+    this.http.delete(`api/event/${id}`).subscribe();
   }
 
   create(event?) {

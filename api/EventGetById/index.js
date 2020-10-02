@@ -15,11 +15,15 @@ const loadDB = async () => {
   db = client.db('checkInApp');
   return db;
 };
-module.exports = async function (context) {
+module.exports = async function (context, req) {
+  const id = req.params.id;
+
   try {
     const database = await loadDB();
-    let events = await database.collection('events').find().toArray();
-    context.res = { body: { items: events } };
+    let item = await database
+      .collection('events')
+      .findOne({ eventId: `${id}` });
+    context.res = { body: { item: item } };
   } catch (error) {
     context.log(`Error code: ${error.code} message: ${error.message}`);
     context.res = {

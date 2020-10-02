@@ -10,8 +10,8 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class EventPage implements OnInit {
   id: number;
-  event = {
-    eventName: 'Event',
+  item = {
+    name: 'Event',
   };
   users = [];
   checkedInUsers = [];
@@ -33,12 +33,13 @@ export class EventPage implements OnInit {
 
   getEvent(id): void {
     this.eventService.getById(id).subscribe((res) => {
-      this.event = res;
+      this.item = res.item;
+      console.log(res);
 
-      if (res.users && res.users.length !== 0) {
-        this.getEventUsers(res.users);
-        this.subscribed = res.users.length;
-      }
+      // if (res.users && res.users.length !== 0) {
+      //   this.getEventUsers(res.users);
+      //   this.subscribed = res.users.length;
+      // }
     });
   }
 
