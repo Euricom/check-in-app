@@ -1,0 +1,9 @@
+.form {
+  display: grid;
+  grid-template-rows: auto min-content;
+  height: 100%;
+
+  &__buttons {
+    padding: 20px;
+  }
+}

@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>New Event</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form class="form" [formGroup]="form" (ngSubmit)="createEvent()">
+    <div class="form__controls">
+      <ion-item>
+        <ion-label position="stacked">Event name</ion-label>
+        <ion-input formControlName="eventName"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Start date</ion-label>
+        <ion-input type="date" formControlName="startDate"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">End date</ion-label>
+        <ion-input type="date" formControlName="endDate"></ion-input>
+      </ion-item>
+    </div>
+
+    <div class="form__buttons">
+      <ion-button fill="outline" expand="block" (click)="onCancel()"
+        >Cancel</ion-button
+      >
+      <ion-button color="primary" expand="block" type="submit"
+        >Create Event</ion-button
+      >
+    </div>
+  </form>
+</ion-content>
