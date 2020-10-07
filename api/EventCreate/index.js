@@ -1,26 +1,16 @@
 const loadDB = require('../shared/mongo');
 
-module.exports = async function (context) {
+module.exports = async function (context, req) {
   try {
     const database = await loadDB();
-
-    const newEvent = {
-      name: 'Hard coded event',
-      startDate: '22/10/2020',
-      endDate: '24/10/2020',
-      users: [
-        { id: 1, checkedIn: true },
-        { id: 2, checkedIn: false },
-        { id: 3, checkedIn: false },
-      ],
-    };
+    const newEvent = { ...req.body };
 
     const sequenceDocument = await database
       .collection('counters')
       .findOneAndUpdate(
         { _id: 'eventId' },
         { $inc: { sequence_value: 1 } },
-        { new: true },
+        { new: true }
       );
 
     const events = await database.collection('events').insertOne({

@@ -34,7 +34,6 @@ export class EventsPage implements OnInit {
   }
 
   createEvent() {
-    this.eventService.create();
-    this.populateList();
+    this.router.navigateByUrl('/events/new');
   }
 }

@@ -20,6 +20,6 @@ export class EventService {
   }
 
   create(event?) {
-    this.http.post(`api/events`, event).subscribe();
+    return this.http.post(`api/events`, event);
   }
 }

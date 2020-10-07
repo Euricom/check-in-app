@@ -8,18 +8,24 @@
   <form class="form" [formGroup]="form" (ngSubmit)="createEvent()">
     <div class="form__controls">
       <ion-item>
-        <ion-label position="stacked">Event name</ion-label>
-        <ion-input formControlName="eventName"></ion-input>
+        <ion-label position="floating">Event name</ion-label>
+        <ion-input formControlName="name"></ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-label position="stacked">Start date</ion-label>
-        <ion-input type="date" formControlName="startDate"></ion-input>
+        <ion-label position="floating">Start date</ion-label>
+        <ion-datetime
+          displayFormat="DD/MM/YYYY"
+          formControlName="startDate"
+        ></ion-datetime>
       </ion-item>
 
       <ion-item>
-        <ion-label position="stacked">End date</ion-label>
-        <ion-input type="date" formControlName="endDate"></ion-input>
+        <ion-label position="floating">End date</ion-label>
+        <ion-datetime
+          displayFormat="DD/MM/YYYY"
+          formControlName="endDate"
+        ></ion-datetime>
       </ion-item>
     </div>
 

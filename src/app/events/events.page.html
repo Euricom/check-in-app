@@ -25,7 +25,9 @@
         <ion-label (click)="goDetail(event.eventId)">
           <h2>{{ event.name }}</h2>
           <p>
-            {{ event.startDate }} {{ event.endDate? "- " + event.endDate : "" }}
+            {{ event.startDate | date:'dd/MM/yyyy' }}
+            <ng-container *ngIf="event.endDate"> - </ng-container>
+            {{ event.endDate | date:'dd/MM/yyyy' }}
           </p>
         </ion-label>
       </ion-item>
