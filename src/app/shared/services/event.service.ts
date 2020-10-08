@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Event, IEventDTO } from './../models/event.model';
 
 @Injectable({
   providedIn: 'root',
@@ -7,12 +10,22 @@ import { HttpClient } from '@angular/common/http';
 export class EventService {
   constructor(private http: HttpClient) {}
 
-  getAll(): any {
-    return this.http.get(`api/events`);
+  getAll(): Observable<Event[]> {
+    return this.http.get<IEventDTO[]>('api/events').pipe(
+      map((results) => {
+        return results.map((result) => {
+          return new Event(result);
+        });
+      })
+    );
   }
 
-  getById(id): any {
-    return this.http.get(`api/event/${id}`);
+  getById(id): Observable<Event> {
+    return this.http.get<IEventDTO>(`api/event/${id}`).pipe(
+      map((result) => {
+        return new Event(result);
+      })
+    );
   }
 
   delete(id): any {

@@ -1,6 +1,7 @@
 import { EventService } from './../shared/services/event.service';
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+import { Event } from '../shared/models/event.model';
 
 @Component({
   selector: 'app-events',
@@ -10,7 +11,7 @@ import { Component, OnInit } from '@angular/core';
 export class EventsPage implements OnInit {
   constructor(private eventService: EventService, private router: Router) {}
 
-  events = [];
+  events = Array<Event>();
 
   ngOnInit() {
     this.populateList();
@@ -18,8 +19,7 @@ export class EventsPage implements OnInit {
 
   populateList(): void {
     this.eventService.getAll().subscribe((res) => {
-      console.log(res.items);
-      this.events = res.items;
+      this.events = res;
     });
   }
 
@@ -28,12 +28,12 @@ export class EventsPage implements OnInit {
   }
 
   onDelete(id): void {
-    console.log('delete ' + id);
     this.eventService.delete(id);
     this.populateList();
   }
 
   createEvent() {
     this.router.navigateByUrl('/events/new');
+    this.populateList();
   }
 }

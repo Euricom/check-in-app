@@ -1,9 +1,12 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/" text="Events"></ion-back-button>
+      <ion-button (click)="onCancel()"
+        ><ion-icon name="chevron-back-outline"></ion-icon>Events</ion-button
+      >
     </ion-buttons>
-    <ion-title>{{item.name}}</ion-title>
+
+    <ion-title>{{item ? item.name : 'Event'}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -34,18 +37,18 @@
     </div>
   </div>
 
-  <ng-container *ngIf="subscribedVisibility">
+  <ng-container *ngIf="item && subscribedVisibility">
     <ion-list *ngFor="let user of users">
       <ion-item>
         <ion-label>
-          <h2>{{ item.users.firstName }} {{ item.users.lastName }}</h2>
+          <h2>{{ user.firstName }} {{ user.lastName }}</h2>
           <p>Euricom</p>
         </ion-label>
       </ion-item>
     </ion-list>
   </ng-container>
 
-  <ng-container *ngIf="!subscribedVisibility">
+  <ng-container *ngIf="item && !subscribedVisibility">
     <ion-list *ngFor="let user of checkedInUsers">
       <ion-item>
         <ion-label>
