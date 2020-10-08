@@ -1,11 +1,6 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Events</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="createEvent()">
-        <ion-icon slot="icon-only" name="add-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -33,4 +28,10 @@
       </ion-item>
     </ion-item-sliding>
   </ion-list>
+
+  <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab-button (click)="createEvent()">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

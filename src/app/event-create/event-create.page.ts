@@ -39,6 +39,6 @@ export class EventCreatePage implements OnInit {
   }
 
   onCancel(): void {
-    this.router.navigateByUrl('/events');
+    this.router.navigateByUrl('/');
   }
 }
