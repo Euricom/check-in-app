@@ -5,9 +5,37 @@ module.exports = async function (context, req) {
 
   try {
     const database = await loadDB();
-    let item = await database.collection('events').findOne({ eventId: id });
+    let item = await database
+      .collection('events')
+      .aggregate([
+        { $match: { eventId: id } },
+        { $unwind: '$users' },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'users.id',
+            foreignField: '_id',
+            as: 'eventUsers',
+          },
+        },
+        { $unwind: '$eventUsers' },
+        {
+          $addFields: {
+            users: { $mergeObjects: ['$eventUsers', '$users'] },
+          },
+        },
+        {
+          $group: {
+            _id: '$id',
+            name: { $first: '$name' },
+            users: { $push: '$users' },
+          },
+        },
+        { $project: { eventUser: 0 } },
+      ])
+      .toArray();
 
-    context.res = { body: { item: item } };
+    context.res = { body: item };
   } catch (error) {
     context.log(`Error code: ${error.code} message: ${error.message}`);
 
