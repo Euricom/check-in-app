@@ -26,7 +26,7 @@ module.exports = async function (context, req) {
         },
         {
           $group: {
-            _id: '$id',
+            _id: '$eventId',
             name: { $first: '$name' },
             users: { $push: '$users' },
           },
@@ -35,7 +35,7 @@ module.exports = async function (context, req) {
       ])
       .toArray();
 
-    context.res = { body: item };
+    context.res = { body: item[0] };
   } catch (error) {
     context.log(`Error code: ${error.code} message: ${error.message}`);
 

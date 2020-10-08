@@ -1,5 +1,4 @@
-import { UserService } from './../services/user.service';
-import { EventService } from './../services/event.service';
+import { EventService } from './../shared/services/event.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
@@ -10,18 +9,13 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class EventPage implements OnInit {
   id: number;
-  item = {
-    name: 'Event',
-  };
-  users = [];
-  checkedInUsers = [];
+  item = { name: '', users: [] };
   checkedIn = 0;
   subscribed = 0;
   subscribedVisibility = true;
 
   constructor(
     private eventService: EventService,
-    private userService: UserService,
     private route: ActivatedRoute
   ) {}
 
@@ -33,30 +27,12 @@ export class EventPage implements OnInit {
 
   getEvent(id): void {
     this.eventService.getById(id).subscribe((res) => {
-      this.item = res.item;
+      this.item = res;
       console.log(res);
-
-      // if (res.users && res.users.length !== 0) {
-      //   this.getEventUsers(res.users);
-      //   this.subscribed = res.users.length;
-      // }
     });
   }
 
   showSubscribed(e) {
     this.subscribedVisibility = e;
-  }
-
-  // TODO remove once API returns complete event w users
-  getEventUsers(users): void {
-    users.forEach((user) => {
-      this.userService.getById(user.id).subscribe((res) => {
-        this.users.push({ ...res, checkedIn: user.checkedIn });
-        this.checkedInUsers = this.users.filter((u) => {
-          return u.checkedIn === true;
-        });
-        this.checkedIn = this.checkedInUsers.length;
-      });
-    });
   }
 }
