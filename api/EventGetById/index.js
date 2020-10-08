@@ -5,11 +5,12 @@ module.exports = async function (context, req) {
 
   try {
     const database = await loadDB();
+    // let item2 = await database.collection('events').findOne({ eventId: id });
     let item = await database
       .collection('events')
       .aggregate([
         { $match: { eventId: id } },
-        { $unwind: '$users' },
+        { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
         {
           $lookup: {
             from: 'users',
@@ -18,7 +19,7 @@ module.exports = async function (context, req) {
             as: 'eventUsers',
           },
         },
-        { $unwind: '$eventUsers' },
+        { $unwind: { path: '$eventUsers', preserveNullAndEmptyArrays: true } },
         {
           $addFields: {
             users: { $mergeObjects: ['$eventUsers', '$users'] },
@@ -26,12 +27,13 @@ module.exports = async function (context, req) {
         },
         {
           $group: {
-            _id: '$eventId',
+            _id: '$_id',
+            eventId: { $first: '$eventId' },
             name: { $first: '$name' },
             users: { $push: '$users' },
           },
         },
-        { $project: { eventUser: 0 } },
+        { $project: { _id: 0, eventUsers: 0, 'users._id': 0 } },
       ])
       .toArray();
 
