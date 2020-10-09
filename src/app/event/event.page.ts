@@ -15,8 +15,8 @@ export class EventPage implements OnInit {
   checkedIn = 0;
   subscribed = 0;
   subscribedVisibility = true;
-  checkedInUsers: Array<User>;
   users: Array<User>;
+  visibleUsers: Array<User>;
 
   constructor(
     private eventService: EventService,
@@ -34,29 +34,41 @@ export class EventPage implements OnInit {
     this.eventService.getById(id).subscribe((result) => {
       console.log(result);
       this.item = new Event(result);
-      this.getUsers();
-      this.getCheckedInUsers();
+      this.users = this.getUsers();
+      this.visibleUsers = this.getCheckedInUsers();
       this.checkedIn = this.getCheckedInUsers().length;
-      this.subscribed = this.getUsers().length;
+      this.subscribed = this.getSubscribedUsers().length;
     });
   }
 
-  showSubscribed(e) {
+  setVisible(e) {
     this.subscribedVisibility = e;
+    if (e) {
+      this.visibleUsers = this.getCheckedInUsers();
+    }
+    if (!e) {
+      this.visibleUsers = this.getSubscribedUsers();
+    }
   }
 
-  getUsers(): Array<User> {
-    if (this.item && this.item.users[0].id) {
-      return (this.users = this.item.users);
+  getUsers() {
+    if (this.item) {
+      return this.item.users.filter((user) => Object.keys(user).length !== 0);
     }
     return [];
   }
 
   getCheckedInUsers(): Array<User> {
-    if (this.item && this.item.users) {
-      return (this.checkedInUsers = this.item.users.filter((user) => {
-        return user.checkedIn === true;
-      }));
+    return this.filterUsers(this.users, (user) => user.checkedIn === true);
+  }
+
+  getSubscribedUsers(): Array<User> {
+    return this.filterUsers(this.users, (user) => user.checkedIn === false);
+  }
+
+  filterUsers(users, filter) {
+    if (users) {
+      return users.filter(filter);
     }
     return [];
   }

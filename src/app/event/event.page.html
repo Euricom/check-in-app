@@ -21,14 +21,14 @@
       <div class="segment__bar">
         <div
           class="segment"
-          (click)="showSubscribed(true)"
+          (click)="setVisible(true)"
           [ngClass]="{'segment--selected' : subscribedVisibility}"
         >
           Subscribed
         </div>
         <div
           class="segment"
-          (click)="showSubscribed(false)"
+          (click)="setVisible(false)"
           [ngClass]="{'segment--selected' : !subscribedVisibility}"
         >
           Checked In
@@ -37,77 +37,44 @@
     </div>
   </div>
 
-  <!-- TODO change template to render both lists, make component of user item -->
-
-  <ng-container *ngIf="item && subscribedVisibility">
-    <ion-list *ngFor="let user of users">
-      <ion-item>
-        <ion-label>
-          <div class="user">
-            <div class="user__labels">
-              <h2>{{ user.firstName }} {{ user.lastName }}</h2>
-              <p>Euricom</p>
+  <ion-list *ngFor="let user of visibleUsers">
+    <ion-item>
+      <ion-label>
+        <div class="user">
+          <div class="user__labels">
+            <h2>{{ user.firstName }} {{ user.lastName }}</h2>
+            <p>Euricom</p>
+          </div>
+          <div class="user__controls">
+            <a
+              [href]="'mailto:' + user.email"
+              class="user__button user__button--small"
+              target="_blank"
+            >
+              <ion-icon name="mail"></ion-icon>
+            </a>
+            <a
+              [href]="'tel:' + user.phoneNumber"
+              class="user__button user__button--small"
+            >
+              <ion-icon name="call"></ion-icon>
+            </a>
+            <div
+              *ngIf="user.checkedIn"
+              class="user__button user__button--success"
+            >
+              <ion-icon size="large" name="checkmark-outline"></ion-icon>
             </div>
-            <div class="user__controls">
-              <a
-                [href]="'mailto:' + user.email"
-                class="user__button user__button--small"
-                target="_blank"
-              >
-                <ion-icon name="mail"></ion-icon>
-              </a>
-              <a
-                [href]="'tel:' + user.phoneNumber"
-                class="user__button user__button--small"
-              >
-                <ion-icon name="call"></ion-icon>
-              </a>
-              <div
-                *ngIf="user.checkedIn"
-                class="user__button user__button--success user__button--transparent"
-              >
-                <ion-icon size="large" name="checkmark-outline"></ion-icon>
-              </div>
 
-              <div
-                *ngIf="!user.checkedIn"
-                class="user__button user__button--danger user__button--transparent"
-              >
-                <ion-icon size="large" name="close-outline"></ion-icon>
-              </div>
+            <div
+              *ngIf="!user.checkedIn"
+              class="user__button user__button--danger"
+            >
+              <ion-icon size="large" name="close-outline"></ion-icon>
             </div>
           </div>
-        </ion-label>
-      </ion-item>
-    </ion-list>
-  </ng-container>
-
-  <ng-container *ngIf="item && !subscribedVisibility">
-    <ion-list *ngFor="let user of checkedInUsers">
-      <ion-item>
-        <ion-label>
-          <div class="user">
-            <div class="user__labels">
-              <h2>{{ user.firstName }} {{ user.lastName }}</h2>
-              <p>Euricom</p>
-            </div>
-            <div class="user__controls">
-              <a
-                [href]="'mailto:' + user.email"
-                class="user__button user__button--small"
-                target="_blank"
-              >
-                <ion-icon name="mail"></ion-icon>
-              </a>
-              <a
-                [href]="'tel:' + user.phoneNumber"
-                class="user__button user__button--small"
-              >
-              </a>
-            </div>
-          </div>
-        </ion-label>
-      </ion-item>
-    </ion-list>
-  </ng-container>
+        </div>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>
