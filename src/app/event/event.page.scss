@@ -45,3 +45,62 @@
 .banner {
   background-color: rgb(34, 138, 207);
 }
+
+.user {
+  display: grid;
+  grid-template-columns: 1fr max-content;
+
+  &__button {
+    color: white;
+    height: 40px;
+    width: 40px;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: orange;
+    margin-left: 15px;
+
+    &--small {
+      height: 25px;
+      width: 25px;
+    }
+
+    &--transparent {
+      background-color: transparent !important;
+    }
+
+    &--danger {
+      background-color: crimson;
+
+      &.user__button--transparent {
+        color: crimson;
+      }
+    }
+
+    &--success {
+      background-color: yellowgreen;
+
+      &.user__button--transparent {
+        color: yellowgreen;
+      }
+    }
+  }
+
+  &__labels {
+    > * {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  &__controls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    > * {
+      flex: none;
+    }
+  }
+}
