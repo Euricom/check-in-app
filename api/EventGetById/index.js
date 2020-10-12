@@ -25,6 +25,7 @@ module.exports = async function (context, req) {
             users: { $mergeObjects: ['$eventUsers', '$users'] },
           },
         },
+        { $sort: { 'users.firstName': 1, 'users.lastName': 1 } },
         {
           $group: {
             _id: '$_id',
