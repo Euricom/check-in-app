@@ -1,5 +1,10 @@
 const MongoClient = require('mongodb').MongoClient;
 
+const auth = {
+  user: process.env.user,
+  password: process.env.password,
+};
+
 let db = null;
 
 const loadDB = async () => {
