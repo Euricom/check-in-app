@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Event } from '../shared/models/event.model';
 import { User } from '../shared/models/user.model';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-event',
@@ -22,7 +23,8 @@ export class EventPage implements OnInit {
   constructor(
     private eventService: EventService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit() {
@@ -71,6 +73,20 @@ export class EventPage implements OnInit {
       return users.filter(filter);
     }
     return [];
+  }
+
+  createSms(user) {
+    const message = `Hey ${
+      user.firstName ? user.firstName : ''
+    }, We wachten op je voor het Euricom event: ${
+      this.item.name
+    }, kan je zsm bevestigen dat je komt?`;
+
+    return this.sanitizer.bypassSecurityTrustUrl(
+      `sms:${encodeURIComponent(user.phoneNumber)}&body=${encodeURIComponent(
+        message
+      )}`
+    );
   }
 
   onCancel(): void {

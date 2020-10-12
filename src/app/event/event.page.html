@@ -49,7 +49,7 @@
           </div>
           <div class="user__controls">
             <a
-              [href]="'mailto:' + user.email"
+              [href]="createSms(user)"
               class="user__button user__button--small"
               target="_blank"
             >
