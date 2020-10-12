@@ -17,6 +17,7 @@ export class EventPage implements OnInit {
   subscribedVisibility = true;
   users: Array<User>;
   visibleUsers: Array<User>;
+  searchText = '';
 
   constructor(
     private eventService: EventService,

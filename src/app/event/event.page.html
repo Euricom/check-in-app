@@ -37,7 +37,9 @@
     </div>
   </div>
 
-  <ion-list *ngFor="let user of visibleUsers">
+  <ion-searchbar [(ngModel)]="searchText"></ion-searchbar>
+
+  <ion-list *ngFor="let user of visibleUsers | appFilter: searchText">
     <ion-item>
       <ion-label>
         <div class="user">

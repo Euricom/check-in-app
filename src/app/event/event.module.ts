@@ -7,14 +7,10 @@ import { IonicModule } from '@ionic/angular';
 import { EventPageRoutingModule } from './event-routing.module';
 
 import { EventPage } from './event.page';
+import { FilterPipe } from '../shared/pipes/filter.pipe';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    EventPageRoutingModule
-  ],
-  declarations: [EventPage]
+  imports: [CommonModule, FormsModule, IonicModule, EventPageRoutingModule],
+  declarations: [EventPage, FilterPipe],
 })
 export class EventPageModule {}
