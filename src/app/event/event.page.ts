@@ -32,9 +32,8 @@ export class EventPage implements OnInit {
 
   getEvent(id): void {
     this.eventService.getById(id).subscribe((result) => {
-      console.log(result);
       this.item = new Event(result);
-      this.users = this.getUsers();
+      this.users = this.getUsers(this.item);
       this.visibleUsers = this.getCheckedInUsers();
       this.checkedIn = this.getCheckedInUsers().length;
       this.subscribed = this.getSubscribedUsers().length;
@@ -51,9 +50,9 @@ export class EventPage implements OnInit {
     }
   }
 
-  getUsers() {
-    if (this.item) {
-      return this.item.users.filter((user) => Object.keys(user).length !== 0);
+  getUsers(item) {
+    if (item) {
+      return item.users.filter((user) => Object.keys(user).length !== 0);
     }
     return [];
   }

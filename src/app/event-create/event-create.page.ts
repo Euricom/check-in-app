@@ -2,6 +2,7 @@ import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EventService } from './../shared/services/event.service';
+import { Event } from '../shared/models/event.model';
 
 @Component({
   selector: 'app-event-create',
@@ -10,7 +11,6 @@ import { EventService } from './../shared/services/event.service';
 })
 export class EventCreatePage implements OnInit {
   newEvent = {};
-  createdEvent = {};
   form: FormGroup;
 
   constructor(
@@ -22,20 +22,19 @@ export class EventCreatePage implements OnInit {
   ngOnInit() {
     this.form = this.formBuilder.group({
       name: ['', Validators.required],
-      startDate: [''],
+      startDate: ['', Validators.required],
       endDate: [''],
     });
   }
 
   createEvent(): void {
-    console.log('submitted form');
-    console.log(this.form);
-    this.newEvent = this.form.value;
-    this.eventService.create(this.newEvent).subscribe((res: any) => {
-      if (res && res.eventId) {
-        this.router.navigateByUrl(`/event/${res.eventId}`);
-      }
-    });
+    if (this.form.valid) {
+      this.newEvent = new Event(this.form.value);
+      this.eventService.create(this.newEvent).subscribe(() => {
+        this.router.navigateByUrl(`/events`);
+      });
+      return;
+    }
   }
 
   onCancel(): void {
