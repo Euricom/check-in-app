@@ -89,6 +89,10 @@ export class EventPage implements OnInit {
     );
   }
 
+  onDelete(id) {
+    console.log(`delete ${id}`);
+  }
+
   onCancel(): void {
     this.router.navigateByUrl('/');
   }
