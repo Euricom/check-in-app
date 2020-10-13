@@ -4,7 +4,8 @@ export class User {
   lastName?: string;
   phoneNumber?: string;
   email?: string;
-  checkedIn: boolean;
+  checkedIn: Array<number>;
+  role: string;
 
   constructor(dto?: IUserDTO) {
     Object.assign(this, dto);
@@ -17,5 +18,6 @@ export interface IUserDTO {
   lastName?: string;
   phoneNumber?: string;
   email?: string;
-  checkedIn: boolean;
+  checkedIn: Array<number>;
+  role: string;
 }
