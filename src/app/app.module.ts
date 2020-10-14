@@ -10,6 +10,38 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 
+import { environment } from 'src/environments/environment';
+import { Configuration } from 'msal';
+import {
+  MsalService,
+  MsalModule,
+  MSAL_CONFIG,
+  MSAL_CONFIG_ANGULAR,
+  MsalAngularConfiguration,
+} from '@azure/msal-angular';
+
+function MSALConfigFactory(): Configuration {
+  return {
+    auth: {
+      clientId: environment.clientId,
+      authority: environment.authority,
+      validateAuthority: true,
+      redirectUri: environment.redirectUrl,
+      postLogoutRedirectUri: environment.redirectUrl,
+      navigateToLoginRequestUrl: true,
+    },
+    cache: {
+      storeAuthStateInCookie: false,
+    },
+  };
+}
+
+function MSALAngularConfigFactory(): MsalAngularConfiguration {
+  return {
+    popUp: false,
+  };
+}
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -18,11 +50,18 @@ import { HttpClientModule } from '@angular/common/http';
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
+    MsalModule,
   ],
   providers: [
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    { provide: MSAL_CONFIG, useFactory: MSALConfigFactory },
+    {
+      provide: MSAL_CONFIG_ANGULAR,
+      useFactory: MSALAngularConfigFactory,
+    },
+    MsalService,
   ],
   bootstrap: [AppComponent],
 })
