@@ -1012,6 +1012,13 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
+"@babel/runtime@^7.4.4":
+  version "7.12.1"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.12.1.tgz#b4116a6b6711d010b2dad3b7b6e43bf1b9954740"
+  integrity sha512-J5AIf3vPj3UwXaAzb5j1xM4WAQDX3EMgemF8rjCP3SoW09LfRKAXQKt6CoVYl230P6iWdRcBbnLDDdnqWxZSCA==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
 "@babel/runtime@^7.8.4":
   version "7.11.2"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.11.2.tgz#f549c13c754cc40b87644b9fa9f09a6a95fe0736"
@@ -1125,6 +1132,14 @@
     loader-utils "^1.4.0"
     merge-source-map "^1.1.0"
     schema-utils "^2.6.4"
+
+"@microsoft/microsoft-graph-client@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@microsoft/microsoft-graph-client/-/microsoft-graph-client-2.1.0.tgz#e470b729e1b7357cb2c495b39e31d043a3b69cf9"
+  integrity sha512-2OjZjz9ink5cXdY3107ZaLe9E32muYhQJy7e0II9cPyBeOXnuJwySzXC4Fv3UhPO2CjVvysiHIQo5gfszIOJHw==
+  dependencies:
+    "@babel/runtime" "^7.4.4"
+    tslib "^1.9.3"
 
 "@ngtools/webpack@10.0.8":
   version "10.0.8"
