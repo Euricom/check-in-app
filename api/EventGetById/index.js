@@ -33,6 +33,7 @@ module.exports = async function (context, req) {
             checkedIn: { $first: '$subscribed.checkedIn' },
           },
         },
+        { $sort: { firstName: 1, lastName: 1 } },
       ])
       .toArray();
 

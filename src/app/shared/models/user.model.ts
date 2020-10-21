@@ -4,7 +4,12 @@ export class User {
   lastName: string;
   phoneNumber?: string;
   email?: string;
-  checkedIn: Array<number>;
+  subscribed: [
+    {
+     id: number,
+     checkedIn: boolean
+    }
+  ];
   role: string;
 
   constructor(dto?: IUserDTO) {
@@ -18,6 +23,6 @@ export interface IUserDTO {
   lastName: string;
   phoneNumber?: string;
   email?: string;
-  checkedIn: Array<number>;
+  subscribed: Array<number>;
   role: string;
 }

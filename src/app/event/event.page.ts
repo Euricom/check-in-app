@@ -37,7 +37,7 @@ export class EventPage implements OnInit {
     this.eventService.getById(id).subscribe((result) => {
       this.item = new Event(result);
       this.users = this.getUsers(this.item);
-      this.visibleUsers = this.getSubscribedUsers();
+      this.getSubscribedUsers();
       this.getCheckedInUsers();
       this.checkedIn = this.getCheckedInUsers().length;
       this.subscribed = this.getSubscribedUsers().length;

@@ -17,15 +17,30 @@
         </ion-item-option>
       </ion-item-options>
       <ion-item>
-        <ion-label (click)="goDetail(event.eventId)">
-          <h2>{{ event.name }}</h2>
-          <p>
-            {{ event.startDate | date:'dd/MM/yyyy' }}
-            <ng-container *ngIf="event.endDate"> - </ng-container>
-            {{ event.endDate | date:'dd/MM/yyyy' }}
-          </p>
+        <ion-label>
+          <div class="event">
+            <div class="event__info" (click)="goDetail(event.eventId)">
+              <h2>{{ event.name }}</h2>
+              <p>
+                {{ event.startDate | date:'dd/MM/yyyy' }}
+                <ng-container *ngIf="event.endDate"> - </ng-container>
+                {{ event.endDate | date:'dd/MM/yyyy' }}
+              </p>
+            </div>
+            <div class="event__extra">
+              <ion-icon
+                size="large"
+                name="checkbox"
+                *ngIf="event.checked"
+              ></ion-icon>
+              <ion-icon
+                size="large"
+                name="square-outline"
+                *ngIf="!event.checked"
+              ></ion-icon>
+            </div>
+          </div>
         </ion-label>
-        <!-- <ion-checkbox slot="end"></ion-checkbox> -->
       </ion-item>
     </ion-item-sliding>
   </ion-list>

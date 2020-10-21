@@ -21,13 +21,6 @@ export class AdminGuard implements CanActivate {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    return this.authService
-      .getActiveUser()
-      .toPromise()
-      .then((user) => {
-        if (user.role === 'Admin') {
-          return true;
-        }
-      });
+    return false;
   }
 }

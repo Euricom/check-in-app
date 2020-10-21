@@ -1,11 +1,9 @@
-import { User } from './user.model';
-
 export class Event {
   eventId: number;
   name: string;
   startDate?: string;
   endDate?: string;
-  users?: Array<User>;
+  checkedIn?: boolean;
 
   constructor(dto?: IEventDTO) {
     Object.assign(this, dto);
@@ -17,5 +15,5 @@ export interface IEventDTO {
   name: string;
   startDate?: string;
   endDate?: string;
-  users?: Array<User>;
+  checkedIn?: boolean;
 }

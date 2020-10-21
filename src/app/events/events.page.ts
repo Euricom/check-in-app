@@ -18,8 +18,9 @@ export class EventsPage implements OnInit {
   ) {}
 
   events = Array<Event>();
+  events2 = Array<Event>();
   user: User;
-  subscriptions: Array<string>;
+  subscriptions;
 
   ngOnInit() {
     this.populateList();
@@ -28,12 +29,26 @@ export class EventsPage implements OnInit {
 
   async getUser() {
     this.user = await this.authService.getUser();
-    console.log(this.user);
+    this.subscriptions = this.user.subscribed;
+
+    // TODO move this to getEvents
+    this.subscriptions.forEach((item) => {
+      console.log(item);
+      this.events.forEach((res) => {
+        if (res.eventId === item.id) {
+          console.log({ ...res, checkedIn: item.checkedIn });
+          this.events2.push(new Event({ ...res, checkedIn: item.checkedIn }));
+        } else {
+          this.events2.push(new Event({ ...res }));
+        }
+      });
+    });
   }
 
   populateList(): void {
     this.eventService.getAll().subscribe((res) => {
       this.events = res;
+      console.log(this.events);
     });
   }
 
