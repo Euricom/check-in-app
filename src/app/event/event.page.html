@@ -51,7 +51,7 @@
         <ion-label>
           <div class="user">
             <div class="user__labels">
-              <h2>{{ user.firstName }} {{ user.lastName }}</h2>
+              <h2>{{ user.firstName + ' ' + user.lastName }}</h2>
               <p>Euricom</p>
             </div>
             <div class="user__controls">
@@ -63,7 +63,7 @@
                 <ion-icon name="mail"></ion-icon>
               </a>
               <a
-                [href]="'tel:' + user.phoneNumber"
+                [href]="'tel:' + user.phoneNumber? user.phoneNumber: ''"
                 class="user__button user__button--small"
               >
                 <ion-icon name="call"></ion-icon>
