@@ -5,40 +5,38 @@ module.exports = async function (context, req) {
 
   try {
     const database = await loadDB();
-    // let item2 = await database.collection('events').findOne({ eventId: id });
     let item = await database
       .collection('events')
       .aggregate([
         { $match: { eventId: id } },
-        { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
-        {
-          $lookup: {
-            from: 'users',
-            localField: 'users.id',
-            foreignField: '_id',
-            as: 'eventUsers',
-          },
-        },
-        { $unwind: { path: '$eventUsers', preserveNullAndEmptyArrays: true } },
-        {
-          $addFields: {
-            users: { $mergeObjects: ['$eventUsers', '$users'] },
-          },
-        },
-        { $sort: { 'users.firstName': 1, 'users.lastName': 1 } },
         {
           $group: {
             _id: '$_id',
             eventId: { $first: '$eventId' },
             name: { $first: '$name' },
-            users: { $push: '$users' },
           },
         },
-        { $project: { _id: 0, eventUsers: 0, 'users._id': 0 } },
       ])
       .toArray();
 
-    context.res = { body: item[0] };
+    let users = await database
+      .collection('users')
+      .aggregate([
+        { $unwind: { path: '$subscribed', preserveNullAndEmptyArrays: true } },
+        { $match: { 'subscribed.id': id } },
+        {
+          $group: {
+            _id: '$_id',
+            firstName: { $first: '$firstName' },
+            lastName: { $first: '$lastName' },
+            phoneNumber: { $first: '$phoneNumber' },
+            checkedIn: { $first: '$subscribed.checkedIn' },
+          },
+        },
+      ])
+      .toArray();
+
+    context.res = { body: { item: item[0], users: users } };
   } catch (error) {
     context.log(`Error code: ${error.code} message: ${error.message}`);
 
