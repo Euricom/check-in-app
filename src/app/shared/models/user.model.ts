@@ -1,7 +1,7 @@
 export class User {
-  id: number;
-  firstName?: string;
-  lastName?: string;
+  id: string;
+  firstName: string;
+  lastName: string;
   phoneNumber?: string;
   email?: string;
   checkedIn: Array<number>;
@@ -13,9 +13,9 @@ export class User {
 }
 
 export interface IUserDTO {
-  id: number;
-  firstName?: string;
-  lastName?: string;
+  _id: string;
+  firstName: string;
+  lastName: string;
   phoneNumber?: string;
   email?: string;
   checkedIn: Array<number>;
