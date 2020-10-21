@@ -3,7 +3,7 @@ import { User } from './user.model';
 export class Event {
   eventId: number;
   name: string;
-  startDate: string;
+  startDate?: string;
   endDate?: string;
   users?: Array<User>;
 
@@ -15,7 +15,7 @@ export class Event {
 export interface IEventDTO {
   eventId: number;
   name: string;
-  startDate: string;
+  startDate?: string;
   endDate?: string;
   users?: Array<User>;
 }

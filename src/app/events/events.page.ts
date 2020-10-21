@@ -37,8 +37,6 @@ export class EventsPage implements OnInit {
     });
   }
 
-  setUserSubscriptions(userId, event): void {}
-
   goDetail(id): void {
     this.router.navigate(['event', id]);
   }

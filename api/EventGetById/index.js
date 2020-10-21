@@ -36,7 +36,9 @@ module.exports = async function (context, req) {
       ])
       .toArray();
 
-    context.res = { body: { item: item[0], users: users } };
+    let result = { ...item[0], users };
+
+    context.res = { body: result };
   } catch (error) {
     context.log(`Error code: ${error.code} message: ${error.message}`);
 

@@ -37,7 +37,8 @@ export class EventPage implements OnInit {
     this.eventService.getById(id).subscribe((result) => {
       this.item = new Event(result);
       this.users = this.getUsers(this.item);
-      this.visibleUsers = this.getCheckedInUsers();
+      this.visibleUsers = this.getSubscribedUsers();
+      this.getCheckedInUsers();
       this.checkedIn = this.getCheckedInUsers().length;
       this.subscribed = this.getSubscribedUsers().length;
     });
@@ -45,10 +46,10 @@ export class EventPage implements OnInit {
 
   setVisible(e) {
     this.subscribedVisibility = e;
-    if (e) {
+    if (!e) {
       this.visibleUsers = this.getCheckedInUsers();
     }
-    if (!e) {
+    if (e) {
       this.visibleUsers = this.getSubscribedUsers();
     }
   }
@@ -61,11 +62,11 @@ export class EventPage implements OnInit {
   }
 
   getCheckedInUsers(): Array<User> {
-    return this.filterUsers(this.users, (user) => user.checkedIn === true);
+    return this.filterUsers(this.users, (user) => user.checkedIn);
   }
 
   getSubscribedUsers(): Array<User> {
-    return this.filterUsers(this.users, (user) => user.checkedIn === false);
+    return this.filterUsers(this.users, (user) => !user.checkedIn);
   }
 
   filterUsers(users, filter) {
@@ -76,8 +77,8 @@ export class EventPage implements OnInit {
   }
 
   createSms(user) {
-    const message = `Hey ${
-      user.firstName ? user.firstName : ''
+    const message = `Hey${
+      user.firstName ? user.firstName + ' ' : ''
     }, We wachten op je voor het Euricom event: ${
       this.item.name
     }, kan je zsm bevestigen dat je komt?`;
