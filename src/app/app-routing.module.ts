@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { MsalGuard } from '@azure/msal-angular';
 import { AdminGuard } from './shared/guards/admin.guard';
-import { AuthGuard } from './shared/guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -23,7 +22,7 @@ const routes: Routes = [
       import('./event-create/event-create.module').then(
         (m) => m.EventCreatePageModule
       ),
-    canActivate: [AdminGuard, MsalGuard],
+    canActivate: [MsalGuard],
   },
   {
     path: 'event/:id',
