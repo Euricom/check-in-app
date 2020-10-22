@@ -27,16 +27,16 @@
                 {{ event.endDate | date:'dd/MM/yyyy' }}
               </p>
             </div>
-            <div class="event__extra">
+            <div class="event__extra" (click)="onCheckEvent(event)">
               <ion-icon
                 size="large"
                 name="checkbox"
-                *ngIf="event.checked"
+                *ngIf="event.subscribed"
               ></ion-icon>
               <ion-icon
                 size="large"
                 name="square-outline"
-                *ngIf="!event.checked"
+                *ngIf="!event.subscribed"
               ></ion-icon>
             </div>
           </div>

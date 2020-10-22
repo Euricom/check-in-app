@@ -1,15 +1,10 @@
 export class User {
-  id: string;
+  _id: string;
   firstName: string;
   lastName: string;
   phoneNumber?: string;
   email?: string;
-  subscribed: [
-    {
-     id: number,
-     checkedIn: boolean
-    }
-  ];
+  subscribed: Array<number>;
   role: string;
 
   constructor(dto?: IUserDTO) {

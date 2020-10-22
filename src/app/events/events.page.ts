@@ -1,3 +1,4 @@
+import { UserService } from './../shared/services/user.service';
 import { AuthService } from './../shared/services/auth.service';
 import { EventService } from './../shared/services/event.service';
 import { Router } from '@angular/router';
@@ -14,42 +15,29 @@ export class EventsPage implements OnInit {
   constructor(
     private eventService: EventService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private userSevice: UserService
   ) {}
 
   events = Array<Event>();
   events2 = Array<Event>();
   user: User;
-  subscriptions;
 
   ngOnInit() {
-    this.populateList();
     this.getUser();
   }
 
   async getUser() {
-    this.user = await this.authService.getUser();
-    this.subscriptions = this.user.subscribed;
-
-    // TODO move this to getEvents
-    this.subscriptions.forEach((item) => {
-      console.log(item);
-      this.events.forEach((res) => {
-        if (res.eventId === item.id) {
-          console.log({ ...res, checkedIn: item.checkedIn });
-          this.events2.push(new Event({ ...res, checkedIn: item.checkedIn }));
-        } else {
-          this.events2.push(new Event({ ...res }));
-        }
-      });
-    });
+    this.user = new User(await this.authService.getUser());
+    this.getEvents();
   }
 
-  populateList(): void {
-    this.eventService.getAll().subscribe((res) => {
-      this.events = res;
-      console.log(this.events);
-    });
+  getEvents() {
+    this.eventService
+      .getAll(this.user ? this.user._id : '-')
+      .subscribe((res) => {
+        this.events = res;
+      });
   }
 
   goDetail(id): void {
@@ -58,10 +46,15 @@ export class EventsPage implements OnInit {
 
   onDelete(id): void {
     this.eventService.delete(id);
-    this.populateList();
+    this.getEvents();
   }
 
   createEvent(): void {
     this.router.navigateByUrl('/events/new');
+  }
+
+  onCheckEvent(item) {
+    item.subscribed = !item.subscribed;
+    this.userSevice.udateUserEvent(this.user._id, item);
   }
 }

@@ -43,7 +43,6 @@ module.exports = async function (context, req) {
         item.subscribed &&
         item.eventId ===
           item.subscribed.find((res) => {
-            console.log(res);
             return res === item.eventId;
           })
       ) {

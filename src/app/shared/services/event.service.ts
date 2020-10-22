@@ -10,8 +10,8 @@ import { Event, IEventDTO } from './../models/event.model';
 export class EventService {
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<Event[]> {
-    return this.http.get<IEventDTO[]>('api/events').pipe(
+  getAll(userId): Observable<Event[]> {
+    return this.http.get<IEventDTO[]>(`api/events/${userId}`).pipe(
       map((results) => {
         return results.map((result) => {
           return new Event(result);

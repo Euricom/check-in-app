@@ -2,7 +2,12 @@
   display: flex;
   align-items: center;
 
+  &__info {
+    margin-right: auto;
+  }
+
   &__extra {
-    margin-left: auto;
+    margin: 10px;
+    margin-bottom: 5px;
   }
 }
