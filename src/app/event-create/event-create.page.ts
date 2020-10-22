@@ -10,7 +10,7 @@ import { Event } from '../shared/models/event.model';
   styleUrls: ['./event-create.page.scss'],
 })
 export class EventCreatePage implements OnInit {
-  newEvent = {};
+  newEvent = Event;
   form: FormGroup;
 
   constructor(
@@ -29,8 +29,9 @@ export class EventCreatePage implements OnInit {
 
   createEvent(): void {
     if (this.form.valid) {
-      this.newEvent = new Event(this.form.value);
+      this.newEvent = this.form.value;
       this.eventService.create(this.newEvent).subscribe(() => {
+        this.eventService.onCreate();
         this.router.navigateByUrl(`/events`);
       });
       return;
@@ -38,6 +39,6 @@ export class EventCreatePage implements OnInit {
   }
 
   onCancel(): void {
-    this.router.navigateByUrl('/');
+    this.router.navigateByUrl(`/events`);
   }
 }

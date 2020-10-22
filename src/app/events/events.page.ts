@@ -2,9 +2,10 @@ import { UserService } from './../shared/services/user.service';
 import { AuthService } from './../shared/services/auth.service';
 import { EventService } from './../shared/services/event.service';
 import { Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Event } from '../shared/models/event.model';
 import { User } from '../shared/models/user.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-events',
@@ -12,16 +13,23 @@ import { User } from '../shared/models/user.model';
   styleUrls: ['./events.page.scss'],
 })
 export class EventsPage implements OnInit {
+  clickEventsubscription: Subscription;
+  events = Array<Event>();
+  events2 = Array<Event>();
+  user: User;
+
   constructor(
     private eventService: EventService,
     private router: Router,
     private authService: AuthService,
     private userSevice: UserService
-  ) {}
-
-  events = Array<Event>();
-  events2 = Array<Event>();
-  user: User;
+  ) {
+    this.clickEventsubscription = this.eventService
+      .getCreateEvent()
+      .subscribe(() => {
+        this.getEvents();
+      });
+  }
 
   ngOnInit() {
     this.getUser();
@@ -45,8 +53,7 @@ export class EventsPage implements OnInit {
   }
 
   onDelete(id): void {
-    this.eventService.delete(id);
-    this.getEvents();
+    this.eventService.delete(id).subscribe(() => this.getEvents());
   }
 
   createEvent(): void {
