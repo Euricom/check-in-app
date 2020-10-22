@@ -4,7 +4,7 @@ export class User {
   lastName: string;
   phoneNumber?: string;
   email?: string;
-  subscribed: Array<number>;
+  subscribed?: [];
   role: string;
 
   constructor(dto?: IUserDTO) {
@@ -18,6 +18,6 @@ export interface IUserDTO {
   lastName: string;
   phoneNumber?: string;
   email?: string;
-  subscribed: Array<number>;
+  subscribed?: [];
   role: string;
 }

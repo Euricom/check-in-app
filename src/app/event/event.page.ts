@@ -1,4 +1,3 @@
-import { AuthService } from './../shared/services/auth.service';
 import { EventService } from './../shared/services/event.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,8 +13,8 @@ import { UserService } from '../shared/services/user.service';
 })
 export class EventPage implements OnInit {
   item: Event;
-  checkedIn = 0;
-  subscribed = 0;
+  checkedInCount = 0;
+  subscribedCount = 0;
   subscribedVisibility = true;
   users: Array<User>;
   visibleUsers: Array<User>;
@@ -27,7 +26,6 @@ export class EventPage implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private sanitizer: DomSanitizer,
-    private authService: AuthService,
     private userSevice: UserService
   ) {}
 
@@ -35,7 +33,6 @@ export class EventPage implements OnInit {
     this.route.params.subscribe((result) => {
       this.getEvent(result.id);
       this.subscribedVisibility = true;
-      this.visibleUsers = this.getSubscribedUsers();
     });
   }
 
@@ -43,22 +40,17 @@ export class EventPage implements OnInit {
     this.eventService.getById(id).subscribe((result) => {
       this.item = new Event(result);
       this.users = this.getUsers(this.item);
-      this.subscribedVisibility = true;
-      this.visibleUsers = this.getSubscribedUsers();
-      this.getCheckedInUsers();
-      this.checkedIn = this.getCheckedInUsers().length;
-      this.subscribed = this.getSubscribedUsers().length;
+      this.checkedInCount = this.getCheckedInUsers().length;
+      this.subscribedCount = this.getSubscribedUsers().length;
     });
   }
 
-  setVisible(e) {
-    this.subscribedVisibility = e;
-    if (!e) {
-      this.visibleUsers = this.getCheckedInUsers();
+  setUserVisiblilty(user) {
+    if (this.subscribedVisibility) {
+      return user.checkedIn ? false : true;
     }
-    if (e) {
-      this.visibleUsers = this.getSubscribedUsers();
-    }
+
+    return user.checkedIn ? true : false;
   }
 
   getUsers(item) {
@@ -97,21 +89,18 @@ export class EventPage implements OnInit {
     );
   }
 
-  onCheckinClick() {
-    const user = this.authService.user;
+  onCheckinClick(user) {
     const item = this.item;
+    user.checkedIn = !user.checkedIn;
 
-    console.log(user);
-
-    const isUserchekedIn = user.subscribed.find((result) => {
-      return (result = this.item.eventId);
-    });
-
-    console.log(isUserchekedIn);
-    this.userSevice.updateUserEvent(user._id, {
-      item,
-      data: { field: 'updateEventCheckedIn', value: true },
-    });
+    this.userSevice
+      .updateUser(user._id, {
+        item,
+        data: { field: 'updateEventCheckedIn', value: user.checkedIn },
+      })
+      .subscribe(() => {
+        this.getEvent(item.eventId);
+      });
   }
 
   onDelete(id) {

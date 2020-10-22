@@ -19,10 +19,10 @@ export class UserService {
   }
 
   create(user) {
-    return this.http.post(`api/users`, user).subscribe();
+    return this.http.post(`api/users`, user);
   }
 
-  updateUserEvent(id, item) {
-    return this.http.put(`api/user/${id}`, item).subscribe();
+  updateUser(id, item) {
+    return this.http.put(`api/user/${id}`, item);
   }
 }

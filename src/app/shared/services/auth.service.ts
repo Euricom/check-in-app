@@ -71,7 +71,7 @@ export class AuthService {
       .then((result) => {
         // Add user to db if not exists
         if (Object.keys(result).length === 0) {
-          this.userService.create(user);
+          this.userService.create(user).subscribe();
         } else {
           return result;
         }

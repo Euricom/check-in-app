@@ -1,3 +1,4 @@
+const { connect } = require('http2');
 const loadDB = require('../shared/mongo');
 
 module.exports = async function (context, req) {
@@ -33,6 +34,7 @@ module.exports = async function (context, req) {
     if (data.field === 'updateEventCheckedIn') {
       let eventId = parseInt(item.eventId);
       let checkedIn = data.value;
+      context.log(checkedIn);
       let user = await database
         .collection('users')
         .update(

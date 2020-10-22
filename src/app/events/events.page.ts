@@ -63,7 +63,7 @@ export class EventsPage implements OnInit {
   onCheckEvent(item) {
     console.log(item);
     item.subscribed = !item.subscribed;
-    this.userSevice.updateUserEvent(this.user._id, {
+    this.userSevice.updateUser(this.user._id, {
       item,
       data: { field: 'updateEventCheckedIn' },
     });
