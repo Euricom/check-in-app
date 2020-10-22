@@ -10,6 +10,7 @@ module.exports = async function (context, req) {
     const database = await loadDB();
 
     if (data.field === 'updateSubscribed') {
+      context.l;
       let eventId = parseInt(item.eventId);
       let subscribed = item.subscribed;
 
@@ -34,7 +35,6 @@ module.exports = async function (context, req) {
     if (data.field === 'updateEventCheckedIn') {
       let eventId = parseInt(item.eventId);
       let checkedIn = data.value;
-      context.log(checkedIn);
       let user = await database
         .collection('users')
         .update(

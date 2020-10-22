@@ -77,7 +77,7 @@ export class EventPage implements OnInit {
 
   createSms(user) {
     const message = `Hey${
-      user.firstName ? user.firstName + ' ' : ''
+      user.firstName ? ' ' + user.firstName : ''
     }, We wachten op je voor het Euricom event: ${
       this.item.name
     }, kan je zsm bevestigen dat je komt?`;
@@ -103,8 +103,17 @@ export class EventPage implements OnInit {
       });
   }
 
-  onDelete(id) {
-    console.log(`delete ${id}`);
+  onDelete(user) {
+    const item = this.item;
+    user.subscribed = false;
+    this.userSevice
+      .updateUser(user._id, {
+        item,
+        data: { field: 'updateSubscribed' },
+      })
+      .subscribe(() => {
+        this.getEvent(item.eventId);
+      });
   }
 
   onCancel(): void {
