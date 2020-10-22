@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
 import { MsalService } from '@azure/msal-angular';
 import { UserService } from './user.service';
-import { concatAll } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +16,7 @@ export class AuthService {
     private userService: UserService
   ) {
     this.authenticated = this.msalService.getAccount() != null;
-    this.getUser();
+    this.getUser().then((result) => (this.user = result));
   }
 
   signOut() {
@@ -35,12 +34,10 @@ export class AuthService {
     return result;
   }
 
-  async getUser(){
+  async getUser() {
     if (!this.authenticated) {
       return null;
     }
-
-    console.log('checking user');
 
     const graphClient = Client.init({
       // Init graph client
@@ -68,13 +65,16 @@ export class AuthService {
       role: '',
     });
 
-    return this.userService.getById(graphUser.id).toPromise().then((result) => {
-    // Add user to db if not exists
-      if (Object.keys(result).length === 0) {
-        this.userService.create(user);
-      } else {
-        return result;
-      }
-    });
+    return this.userService
+      .getById(graphUser.id)
+      .toPromise()
+      .then((result) => {
+        // Add user to db if not exists
+        if (Object.keys(result).length === 0) {
+          this.userService.create(user);
+        } else {
+          return result;
+        }
+      });
   }
 }

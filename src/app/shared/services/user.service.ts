@@ -22,7 +22,7 @@ export class UserService {
     return this.http.post(`api/users`, user).subscribe();
   }
 
-  udateUserEvent(id, item) {
+  updateUserEvent(id, item) {
     return this.http.put(`api/user/${id}`, item).subscribe();
   }
 }

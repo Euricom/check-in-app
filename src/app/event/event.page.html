@@ -56,6 +56,7 @@
             </div>
             <div class="user__controls">
               <a
+                *ngIf="user.phoneNumber !== null || undefined || ''"
                 [href]="createSms(user)"
                 class="user__button user__button--small"
                 target="_blank"
@@ -63,21 +64,24 @@
                 <ion-icon name="chatbox"></ion-icon>
               </a>
               <a
-                [href]="'tel:' + user.phoneNumber? user.phoneNumber: ''"
+                *ngIf="user.phoneNumber !== null || undefined || ''"
+                [href]="user.phoneNumber"
                 class="user__button user__button--small"
               >
                 <ion-icon name="call"></ion-icon>
               </a>
               <div
-                *ngIf="user.checkedIn"
+                *ngIf="!user.checkedIn"
                 class="user__button user__button--success"
+                (click)="onCheckinClick()"
               >
                 <ion-icon size="large" name="checkmark-outline"></ion-icon>
               </div>
 
               <div
-                *ngIf="!user.checkedIn"
+                *ngIf="user.checkedIn"
                 class="user__button user__button--danger"
+                (click)="onCheckinClick()"
               >
                 <ion-icon size="large" name="close-outline"></ion-icon>
               </div>

@@ -1,9 +1,11 @@
+import { AuthService } from './../shared/services/auth.service';
 import { EventService } from './../shared/services/event.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Event } from '../shared/models/event.model';
 import { User } from '../shared/models/user.model';
 import { DomSanitizer } from '@angular/platform-browser';
+import { UserService } from '../shared/services/user.service';
 
 @Component({
   selector: 'app-event',
@@ -11,7 +13,6 @@ import { DomSanitizer } from '@angular/platform-browser';
   styleUrls: ['./event.page.scss'],
 })
 export class EventPage implements OnInit {
-  id: number;
   item: Event;
   checkedIn = 0;
   subscribed = 0;
@@ -19,17 +20,22 @@ export class EventPage implements OnInit {
   users: Array<User>;
   visibleUsers: Array<User>;
   searchText = '';
+  user: User;
 
   constructor(
     private eventService: EventService,
     private route: ActivatedRoute,
     private router: Router,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private authService: AuthService,
+    private userSevice: UserService
   ) {}
 
   ngOnInit() {
     this.route.params.subscribe((result) => {
       this.getEvent(result.id);
+      this.subscribedVisibility = true;
+      this.visibleUsers = this.getSubscribedUsers();
     });
   }
 
@@ -37,7 +43,8 @@ export class EventPage implements OnInit {
     this.eventService.getById(id).subscribe((result) => {
       this.item = new Event(result);
       this.users = this.getUsers(this.item);
-      this.getSubscribedUsers();
+      this.subscribedVisibility = true;
+      this.visibleUsers = this.getSubscribedUsers();
       this.getCheckedInUsers();
       this.checkedIn = this.getCheckedInUsers().length;
       this.subscribed = this.getSubscribedUsers().length;
@@ -88,6 +95,23 @@ export class EventPage implements OnInit {
         message
       )}`
     );
+  }
+
+  onCheckinClick() {
+    const user = this.authService.user;
+    const item = this.item;
+
+    console.log(user);
+
+    const isUserchekedIn = user.subscribed.find((result) => {
+      return (result = this.item.eventId);
+    });
+
+    console.log(isUserchekedIn);
+    this.userSevice.updateUserEvent(user._id, {
+      item,
+      data: { field: 'updateEventCheckedIn', value: true },
+    });
   }
 
   onDelete(id) {

@@ -2,27 +2,43 @@ const loadDB = require('../shared/mongo');
 
 module.exports = async function (context, req) {
   const id = req.params.id;
-  const eventId = parseInt(req.body.eventId);
-  const subscribed = req.body.subscribed;
-  context.log(id, subscribed, eventId);
+  const item = req.body.item;
+  const data = req.body.data;
 
   try {
     const database = await loadDB();
 
-    if (subscribed) {
+    if (data.field === 'updateSubscribed') {
+      let eventId = parseInt(item.eventId);
+      let subscribed = item.subscribed;
+
+      if (subscribed) {
+        let user = await database
+          .collection('users')
+          .update(
+            { _id: id },
+            { $push: { subscribed: { id: eventId, checkedIn: false } } }
+          );
+        context.res = { body: user };
+      }
+
+      if (!subscribed) {
+        let user = await database
+          .collection('users')
+          .update({ _id: id }, { $pull: { subscribed: { id: eventId } } });
+        context.res = { body: user };
+      }
+    }
+
+    if (data.field === 'updateEventCheckedIn') {
+      let eventId = parseInt(item.eventId);
+      let checkedIn = data.value;
       let user = await database
         .collection('users')
         .update(
-          { _id: id },
-          { $push: { subscribed: { id: eventId, checkedIn: false } } }
+          { _id: id, 'subscribed.id': eventId },
+          { $set: { 'subscribed.$.checkedIn': checkedIn } }
         );
-      context.res = { body: user };
-    }
-
-    if (!subscribed) {
-      let user = await database
-        .collection('users')
-        .update({ _id: id }, { $pull: { subscribed: { id: eventId } } });
       context.res = { body: user };
     }
   } catch (error) {

@@ -2,7 +2,7 @@ import { UserService } from './../shared/services/user.service';
 import { AuthService } from './../shared/services/auth.service';
 import { EventService } from './../shared/services/event.service';
 import { Router } from '@angular/router';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Event } from '../shared/models/event.model';
 import { User } from '../shared/models/user.model';
 import { Subscription } from 'rxjs';
@@ -61,7 +61,11 @@ export class EventsPage implements OnInit {
   }
 
   onCheckEvent(item) {
+    console.log(item);
     item.subscribed = !item.subscribed;
-    this.userSevice.udateUserEvent(this.user._id, item);
+    this.userSevice.updateUserEvent(this.user._id, {
+      item,
+      data: { field: 'updateEventCheckedIn' },
+    });
   }
 }
