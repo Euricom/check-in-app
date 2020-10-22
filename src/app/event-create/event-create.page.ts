@@ -22,7 +22,7 @@ export class EventCreatePage implements OnInit {
   ngOnInit() {
     this.form = this.formBuilder.group({
       name: ['', Validators.required],
-      startDate: ['', Validators.required],
+      startDate: [''],
       endDate: [''],
     });
   }
