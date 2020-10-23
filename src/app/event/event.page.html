@@ -42,8 +42,8 @@
 
   <ion-searchbar [(ngModel)]="searchText"></ion-searchbar>
 
-  <ion-list *ngFor="let user of users | appFilter: searchText">
-    <ion-item-sliding>
+  <ion-list>
+    <ion-item-sliding *ngFor="let user of users | appFilter: searchText">
       <ion-item-options side="start">
         <ion-item-option color="danger" (click)="onDelete(user)" expandable>
           Delete
