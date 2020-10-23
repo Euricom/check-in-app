@@ -41,11 +41,17 @@ export class EventsPage implements OnInit {
   }
 
   getEvents() {
-    this.eventService
+    return this.eventService
       .getAll(this.user ? this.user._id : '-')
       .subscribe((res) => {
         this.events = res;
       });
+  }
+
+  doRefresh(e) {
+    this.getEvents().add(() => {
+      e.target.complete();
+    });
   }
 
   goDetail(id): void {

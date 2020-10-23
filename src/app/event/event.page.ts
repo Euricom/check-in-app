@@ -36,8 +36,8 @@ export class EventPage implements OnInit {
     });
   }
 
-  getEvent(id): void {
-    this.eventService.getById(id).subscribe((result) => {
+  getEvent(id) {
+    return this.eventService.getById(id).subscribe((result) => {
       this.item = new Event(result);
       this.users = this.getUsers(this.item);
       this.checkedInCount = this.getCheckedInUsers().length;
@@ -118,5 +118,11 @@ export class EventPage implements OnInit {
 
   onCancel(): void {
     this.router.navigateByUrl('/');
+  }
+
+  doRefresh(e) {
+    this.getEvent(this.item.eventId).add(() => {
+      e.target.complete();
+    });
   }
 }
