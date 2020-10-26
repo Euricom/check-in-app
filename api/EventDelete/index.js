@@ -8,6 +8,10 @@ module.exports = async function (context, req) {
 
     await database.collection('events').deleteOne({ eventId: id });
 
+    await database
+      .collection('users')
+      .update({}, { $pull: { subscribed: { id: id } } }, { multi: true });
+
     context.res = {
       status: 204,
     };
