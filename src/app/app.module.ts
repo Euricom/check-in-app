@@ -21,6 +21,8 @@ import {
   MsalInterceptor,
 } from '@azure/msal-angular';
 
+import { InterceptorService } from 'src/app/shared/services/interceptor.service';
+
 export const protectedResourceMap: [string, string[]][] = [
   ['https://graph.microsoft.com/beta/', ['user.read']],
 ];
@@ -66,6 +68,7 @@ function MSALAngularConfigFactory(): MsalAngularConfiguration {
       useClass: MsalInterceptor,
       multi: true,
     },
+    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: MSAL_CONFIG, useFactory: MSALConfigFactory },
     {
