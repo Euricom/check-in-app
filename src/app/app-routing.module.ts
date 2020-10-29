@@ -8,13 +8,13 @@ const routes: Routes = [
     path: '',
     redirectTo: 'events',
     pathMatch: 'full',
-    canActivate: [],
+    // canActivate: [MsalGuard],
   },
   {
     path: 'events',
     loadChildren: () =>
       import('./events/events.module').then((m) => m.EventsPageModule),
-    canActivate: [],
+    // canActivate: [MsalGuard],
   },
   {
     path: 'events/new',
@@ -22,13 +22,13 @@ const routes: Routes = [
       import('./event-create/event-create.module').then(
         (m) => m.EventCreatePageModule
       ),
-    canActivate: [],
+    // canActivate: [MsalGuard],
   },
   {
     path: 'event/:id',
     loadChildren: () =>
       import('./event/event.module').then((m) => m.EventPageModule),
-    canActivate: [],
+    // canActivate: [MsalGuard],
   },
   {
     path: 'access-denied',
