@@ -16,9 +16,8 @@ export class InterceptorService implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     const proxyReq = req.clone({
-      url: `http://checkinappfunctions.azurewebsites.net/${req.url}`,
+      url: `https://checkinappfunctions.azurewebsites.net/${req.url}`,
     });
-    console.log(proxyReq);
     return next.handle(proxyReq);
   }
 }
