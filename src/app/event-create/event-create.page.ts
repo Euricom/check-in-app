@@ -2,7 +2,6 @@ import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EventService } from './../shared/services/event.service';
-import { Event } from '../shared/models/event.model';
 
 @Component({
   selector: 'app-event-create',
@@ -10,7 +9,6 @@ import { Event } from '../shared/models/event.model';
   styleUrls: ['./event-create.page.scss'],
 })
 export class EventCreatePage implements OnInit {
-  newEvent = Event;
   form: FormGroup;
 
   constructor(
@@ -28,14 +26,14 @@ export class EventCreatePage implements OnInit {
   }
 
   createEvent(): void {
-    if (this.form.valid) {
-      this.newEvent = this.form.value;
-      this.eventService.create(this.newEvent).subscribe(() => {
-        this.eventService.onCreate();
-        this.router.navigateByUrl(`/events`);
-      });
+    if (!this.form.valid) {
       return;
     }
+    const newEvent = this.form.value;
+    this.eventService.create(newEvent).subscribe(() => {
+      this.eventService.onCreate();
+      this.router.navigateByUrl(`/events`);
+    });
   }
 
   onCancel(): void {

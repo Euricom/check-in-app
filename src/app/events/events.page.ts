@@ -15,7 +15,6 @@ import { Subscription } from 'rxjs';
 export class EventsPage implements OnInit {
   clickEventsubscription: Subscription;
   events = Array<Event>();
-  events2 = Array<Event>();
   user: User;
 
   constructor(
@@ -59,6 +58,7 @@ export class EventsPage implements OnInit {
   }
 
   onDelete(id): void {
+    // TODO filter out deleted from events
     this.eventService.delete(id).subscribe(() => this.getEvents());
   }
 

@@ -45,21 +45,18 @@ export class EventPage implements OnInit {
     });
   }
 
-  setUserVisiblilty(user) {
-    if (this.subscribedVisibility) {
-      return user.checkedIn ? false : true;
-    }
-
-    return user.checkedIn ? true : false;
+  setUserVisiblilty({ checkedIn }) {
+    return this.subscribedVisibility ? !checkedIn : checkedIn;
   }
 
   getUsers(item) {
-    if (item) {
-      return item.users.filter((user) => Object.keys(user).length !== 0);
+    if (!item) {
+      return [];
     }
-    return [];
+    return item.users.filter((user) => Object.keys(user).length !== 0);
   }
 
+  // TODO calculate subbed/checked in by subtracting from total
   getCheckedInUsers(): Array<User> {
     return this.filterUsers(this.users, (user) => user.checkedIn);
   }
@@ -69,10 +66,10 @@ export class EventPage implements OnInit {
   }
 
   filterUsers(users, filter) {
-    if (users) {
-      return users.filter(filter);
+    if (!users) {
+      return [];
     }
-    return [];
+    return users.filter(filter);
   }
 
   createSms(user) {

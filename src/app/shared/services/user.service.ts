@@ -10,6 +10,8 @@ import { map } from 'rxjs/operators';
 export class UserService {
   constructor(private http: HttpClient) {}
 
+  // TODO check if map function is needed
+
   getById(id): Observable<User> {
     return this.http.get<IUserDTO>(`api/user/${id}`).pipe(
       map((result) => {
@@ -18,8 +20,12 @@ export class UserService {
     );
   }
 
-  create(user) {
-    return this.http.post(`api/users`, user);
+  create(user): Observable<User> {
+    return this.http.post<IUserDTO>(`api/users`, user).pipe(
+      map((result) => {
+        return new User(result);
+      })
+    );
   }
 
   updateUser(id, item) {
