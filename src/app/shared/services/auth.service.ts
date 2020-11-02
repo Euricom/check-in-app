@@ -16,7 +16,6 @@ export class AuthService {
     private userService: UserService
   ) {
     this.authenticated = this.msalService.getAccount() != null;
-    this.getUser().then((result) => (this.user = result));
   }
 
   signOut() {
@@ -65,14 +64,21 @@ export class AuthService {
       role: '',
     });
 
-    return this.userService
+    return await this.userService
       .getById(graphUser.id)
       .toPromise()
       .then((result) => {
-        // Add user to db if not exists
+        // // Add user to db if not exists
         if (Object.keys(result).length === 0) {
-          this.userService.create(user).subscribe();
+          return this.userService
+            .create(user)
+            .toPromise()
+            .then(() => {
+              this.user = user;
+              return user;
+            });
         } else {
+          this.user = result;
           return result;
         }
       });

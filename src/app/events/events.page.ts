@@ -36,7 +36,7 @@ export class EventsPage implements OnInit {
   }
 
   async getUser() {
-    this.user = new User(await this.authService.getUser());
+    this.user = await this.authService.getUser();
     this.getEvents();
   }
 
