@@ -68,7 +68,7 @@
               </a>
               <a
                 *ngIf="user.phoneNumber !== null || undefined || ''"
-                [href]="user.phoneNumber"
+                [href]="'tel:' + user.phoneNumber"
                 class="user__button user__button--small"
               >
                 <ion-icon name="call"></ion-icon>
