@@ -33,7 +33,7 @@ export class AuthService {
     return result;
   }
 
-  async getUser() {
+  async getOrCreateUser() {
     if (!this.authenticated) {
       return null;
     }
@@ -68,7 +68,7 @@ export class AuthService {
       .getById(graphUser.id)
       .toPromise()
       .then((result) => {
-        // // Add user to db if not exists
+        // Add user to db if not exists
         if (Object.keys(result).length === 0) {
           return this.userService
             .create(user)
