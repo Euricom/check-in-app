@@ -54,10 +54,12 @@ export class AuthService {
 
     const graphUser = await graphClient.api('/me').get();
 
-    let result: User = await this.userService.getById(graphUser.id).toPromise();
+    let authUser: User = await this.userService
+      .getById(graphUser.id)
+      .toPromise();
 
     // Add user to db if not exists
-    if (Object.keys(result).length === 0) {
+    if (Object.keys(authUser).length === 0) {
       const user = new User({
         _id: graphUser.id,
         firstName: graphUser.givenName,
@@ -67,10 +69,10 @@ export class AuthService {
         subscribed: [],
         role: '',
       });
-      result = await this.userService.create(user).toPromise();
+      authUser = await this.userService.create(user).toPromise();
     }
 
-    this.user = result;
-    return result;
+    this.user = authUser;
+    return authUser;
   }
 }
