@@ -11,7 +11,7 @@
 
   <ion-list>
     <ion-item-sliding *ngFor="let event of events">
-      <ion-item-options side="start">
+      <ion-item-options side="start" *ngIf="isAdmin">
         <ion-item-option
           color="danger"
           (click)="onDelete(event.eventId)"
@@ -49,7 +49,7 @@
     </ion-item-sliding>
   </ion-list>
 
-  <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+  <ion-fab *ngIf="isAdmin" vertical="bottom" horizontal="center" slot="fixed">
     <ion-fab-button (click)="createEvent()">
       <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>

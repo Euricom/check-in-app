@@ -3,25 +3,32 @@ import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
 import { MsalService } from '@azure/msal-angular';
 import { UserService } from './user.service';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   public authenticated: boolean;
-  public user: User;
+  public currentUser: Observable<User>;
+  private currentUserSubject: BehaviorSubject<User>;
 
   constructor(
     private msalService: MsalService,
     private userService: UserService
   ) {
     this.authenticated = this.msalService.getAccount() != null;
+
+    this.currentUserSubject = new BehaviorSubject<User>(
+      JSON.parse(localStorage.getItem('currentUser'))
+    );
+    this.currentUser = this.currentUserSubject.asObservable();
   }
 
   signOut() {
     this.msalService.logout();
     this.authenticated = false;
-    this.user = null;
+    this.currentUser = null;
   }
 
   async getAccessToken(): Promise<any> {
@@ -31,6 +38,10 @@ export class AuthService {
         console.log('Get token failed', JSON.stringify(error));
       });
     return result;
+  }
+
+  public get currentUserValue(): User {
+    return this.currentUserSubject.value;
   }
 
   async getOrCreateUser() {
@@ -72,7 +83,8 @@ export class AuthService {
       authUser = await this.userService.create(user).toPromise();
     }
 
-    this.user = authUser;
+    localStorage.setItem('currentUser', JSON.stringify(authUser));
+    this.currentUserSubject.next(authUser);
     return authUser;
   }
 }

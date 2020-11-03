@@ -16,6 +16,7 @@ export class EventsPage implements OnInit {
   clickEventsubscription: Subscription;
   events = Array<Event>();
   user: User;
+  isAdmin = false;
 
   constructor(
     private eventService: EventService,
@@ -30,12 +31,11 @@ export class EventsPage implements OnInit {
       });
   }
 
-  ngOnInit() {
-    this.getUser();
-  }
-
-  async getUser() {
+  async ngOnInit() {
     this.user = await this.authService.getOrCreateUser();
+    if (this.user.role === 'Admin') {
+      this.isAdmin = true;
+    }
     this.getEvents();
   }
 
@@ -58,8 +58,8 @@ export class EventsPage implements OnInit {
   }
 
   onDelete(id): void {
-    // TODO filter out deleted from events
-    this.eventService.delete(id).subscribe(() => this.getEvents());
+    this.events = this.events.filter((item) => id !== item.eventId);
+    this.eventService.delete(id).subscribe();
   }
 
   createEvent(): void {

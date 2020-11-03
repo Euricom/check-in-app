@@ -6,7 +6,7 @@
       >
     </ion-buttons>
     <ion-title>{{item ? item.name : 'Event'}}</ion-title>
-    <ion-buttons slot="end">
+    <ion-buttons *ngIf="isAdmin" slot="end">
       <ion-button (click)="presentPopover($event)">
         <ion-icon
           slot="icon-only"
@@ -52,7 +52,7 @@
 
   <ion-list>
     <ion-item-sliding *ngFor="let user of users | appFilter: searchText">
-      <ion-item-options side="start">
+      <ion-item-options side="start" *ngIf="isAdmin">
         <ion-item-option color="danger" (click)="onDelete(user)" expandable>
           Delete
         </ion-item-option>
@@ -67,7 +67,7 @@
             </div>
             <div class="user__controls">
               <a
-                *ngIf="user.phoneNumber !== null || undefined || ''"
+                *ngIf="(user.phoneNumber !== null || undefined || '') && currentUser._id !== user._id"
                 [href]="createSms(user)"
                 class="user__button user__button--small"
                 target="_blank"
@@ -75,27 +75,29 @@
                 <ion-icon name="chatbox"></ion-icon>
               </a>
               <a
-                *ngIf="user.phoneNumber !== null || undefined || ''"
+                *ngIf="(user.phoneNumber !== null || undefined || '') && currentUser._id !== user._id"
                 [href]="'tel:' + user.phoneNumber"
                 class="user__button user__button--small"
               >
                 <ion-icon name="call"></ion-icon>
               </a>
-              <div
-                *ngIf="!user.checkedIn"
-                class="user__button user__button--success"
-                (click)="onCheckinClick(user)"
-              >
-                <ion-icon size="large" name="checkmark-outline"></ion-icon>
-              </div>
+              <ng-container *ngIf="currentUser._id === user._id || isAdmin">
+                <div
+                  *ngIf="!user.checkedIn"
+                  class="user__button user__button--success"
+                  (click)="onCheckinClick(user)"
+                >
+                  <ion-icon size="large" name="checkmark-outline"></ion-icon>
+                </div>
 
-              <div
-                *ngIf="user.checkedIn"
-                class="user__button user__button--danger"
-                (click)="onCheckinClick(user)"
-              >
-                <ion-icon size="large" name="close-outline"></ion-icon>
-              </div>
+                <div
+                  *ngIf="user.checkedIn"
+                  class="user__button user__button--danger"
+                  (click)="onCheckinClick(user)"
+                >
+                  <ion-icon size="large" name="close-outline"></ion-icon>
+                </div>
+              </ng-container>
             </div>
           </div>
         </ion-label>

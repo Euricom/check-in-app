@@ -1,3 +1,4 @@
+import { AuthService } from './../shared/services/auth.service';
 import { PopOverListComponent } from './../components/pop-over-list/pop-over-list.component';
 import { EventService } from './../shared/services/event.service';
 import { Component, OnInit } from '@angular/core';
@@ -21,8 +22,12 @@ export class EventPage implements OnInit {
   users: Array<User>;
   visibleUsers: Array<User>;
   searchText = '';
-  user: User;
-  popOverOptions: Array<any>;
+  currentUser: User;
+  isAdmin = false;
+  popOverOptions = [
+    { title: 'Unsubscribe all', action: 'unSubAll' },
+    { title: 'Check out all', action: 'checkOutAll' },
+  ];
 
   constructor(
     private eventService: EventService,
@@ -30,8 +35,13 @@ export class EventPage implements OnInit {
     private router: Router,
     private sanitizer: DomSanitizer,
     private userSevice: UserService,
+    private authService: AuthService,
     public popoverController: PopoverController
-  ) {}
+  ) {
+    this.authService.currentUser.subscribe(
+      (result) => (this.currentUser = result)
+    );
+  }
 
   ngOnInit() {
     this.route.params.subscribe((result) => {
@@ -39,10 +49,11 @@ export class EventPage implements OnInit {
       this.subscribedVisibility = true;
     });
 
-    this.popOverOptions = [
-      { title: 'Unsubscribe all', action: 'unSubAll' },
-      { title: 'Check out all', action: 'checkOutAll' },
-    ];
+    if (this.currentUser.role === 'Admin') {
+      this.isAdmin = true;
+    }
+
+    console.log(this.currentUser);
   }
 
   getEvent(id) {
@@ -79,15 +90,21 @@ export class EventPage implements OnInit {
     });
   }
 
-  logClick() {
-    console.log('eh?');
-  }
-
   getUsers(item) {
     if (!item) {
       return [];
     }
-    return item.users.filter((user) => Object.keys(user).length !== 0);
+    if (!this.currentUser) {
+      return item.users.filter((user) => Object.keys(user).length !== 0);
+    }
+    const currentUser = item.users.filter(
+      (user) => this.currentUser._id === user._id
+    );
+    const otherUsers = item.users.filter(
+      (user) =>
+        this.currentUser._id !== user._id && Object.keys(user).length !== 0
+    );
+    return [...currentUser, ...otherUsers];
   }
 
   // TODO calculate subbed/checked in by subtracting from total

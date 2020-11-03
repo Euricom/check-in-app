@@ -22,7 +22,7 @@ const routes: Routes = [
       import('./event-create/event-create.module').then(
         (m) => m.EventCreatePageModule
       ),
-    canActivate: [MsalGuard],
+    canActivate: [MsalGuard, AdminGuard],
   },
   {
     path: 'event/:id',
