@@ -37,6 +37,10 @@ export class EventService {
     return this.http.post(`api/events`, event);
   }
 
+  update(id, option) {
+    return this.http.put(`api/event/${id}`, option);
+  }
+
   onCreate() {
     this.subject.next();
   }
