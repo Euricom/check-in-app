@@ -1,12 +1,20 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="onCancel()"
-        ><ion-icon name="chevron-back-outline"></ion-icon>Events</ion-button
+      <ion-button (click)="onCancel()">
+        <ion-icon name="chevron-back-outline"></ion-icon>Events</ion-button
       >
     </ion-buttons>
-
     <ion-title>{{item ? item.name : 'Event'}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="presentPopover($event)">
+        <ion-icon
+          slot="icon-only"
+          ios="ellipsis-horizontal"
+          md="ellipsis-vertical"
+        ></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

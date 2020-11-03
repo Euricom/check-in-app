@@ -1,0 +1,10 @@
+<ion-list>
+  <ion-list-header>Options</ion-list-header>
+  <ion-item
+    *ngFor="let item of listItems; let last = last"
+    (click)="listItemClicked(item.action)"
+    [lines]="last ? 'none' : 'inset'"
+  >
+    {{ item.title }}
+  </ion-item>
+</ion-list>

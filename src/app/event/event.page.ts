@@ -1,3 +1,4 @@
+import { PopOverListComponent } from './../components/pop-over-list/pop-over-list.component';
 import { EventService } from './../shared/services/event.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -5,6 +6,7 @@ import { Event } from '../shared/models/event.model';
 import { User } from '../shared/models/user.model';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UserService } from '../shared/services/user.service';
+import { PopoverController } from '@ionic/angular';
 
 @Component({
   selector: 'app-event',
@@ -20,13 +22,15 @@ export class EventPage implements OnInit {
   visibleUsers: Array<User>;
   searchText = '';
   user: User;
+  popOverOptions: Array<any>;
 
   constructor(
     private eventService: EventService,
     private route: ActivatedRoute,
     private router: Router,
     private sanitizer: DomSanitizer,
-    private userSevice: UserService
+    private userSevice: UserService,
+    public popoverController: PopoverController
   ) {}
 
   ngOnInit() {
@@ -34,6 +38,11 @@ export class EventPage implements OnInit {
       this.getEvent(result.id);
       this.subscribedVisibility = true;
     });
+
+    this.popOverOptions = [
+      { title: 'Unsubscribe all', action: 'unSubAll' },
+      { title: 'Check out all', action: 'checkOutAll' },
+    ];
   }
 
   getEvent(id) {
@@ -47,6 +56,31 @@ export class EventPage implements OnInit {
 
   setUserVisiblilty({ checkedIn }) {
     return this.subscribedVisibility ? !checkedIn : checkedIn;
+  }
+
+  async presentPopover(ev: any) {
+    const popover = await this.popoverController.create({
+      component: PopOverListComponent,
+      event: ev,
+      componentProps: {
+        listItems: this.popOverOptions,
+      },
+    });
+    await popover.present();
+    return await popover.onDidDismiss().then((data: any) => {
+      if (data) {
+        if (data.data === 'unSubAll') {
+          this.unSubscribeAll(this.item.eventId);
+        }
+        if (data.data === 'checkOutAll') {
+          this.checkOutAll(this.item.eventId);
+        }
+      }
+    });
+  }
+
+  logClick() {
+    console.log('eh?');
   }
 
   getUsers(item) {
@@ -86,10 +120,23 @@ export class EventPage implements OnInit {
     );
   }
 
+  unSubscribeAll(id) {
+    const item = this.item;
+    this.eventService.update(id, 'unSubAll').subscribe(() => {
+      this.getEvent(item.eventId);
+    });
+  }
+
+  checkOutAll(id) {
+    const item = this.item;
+    this.eventService.update(id, 'checkOutAll').subscribe(() => {
+      this.getEvent(item.eventId);
+    });
+  }
+
   onCheckinClick(user) {
     const item = this.item;
     user.checkedIn = !user.checkedIn;
-
     this.userSevice
       .updateUser(user._id, {
         item,
