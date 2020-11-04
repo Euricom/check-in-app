@@ -6,6 +6,7 @@ export class User {
   email?: string;
   subscribed?: [];
   role: string;
+  checkedIn?: boolean;
 
   constructor(dto?: IUserDTO) {
     Object.assign(this, dto);
@@ -20,4 +21,5 @@ export interface IUserDTO {
   email?: string;
   subscribed?: [];
   role: string;
+  checkedIn?: boolean;
 }

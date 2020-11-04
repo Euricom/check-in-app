@@ -17,6 +17,7 @@ export class EventsPage implements OnInit {
   events = Array<Event>();
   user: User;
   isAdmin = false;
+  loading = true;
 
   constructor(
     private eventService: EventService,
@@ -40,9 +41,11 @@ export class EventsPage implements OnInit {
   }
 
   getEvents() {
+    this.loading = true;
     return this.eventService
       .getAll(this.user ? this.user._id : '-')
       .subscribe((res) => {
+        this.loading = false;
         this.events = res;
       });
   }

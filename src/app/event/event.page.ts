@@ -20,10 +20,10 @@ export class EventPage implements OnInit {
   subscribedCount = 0;
   subscribedVisibility = true;
   users: Array<User>;
-  visibleUsers: Array<User>;
   searchText = '';
   currentUser: User;
   isAdmin = false;
+  loading = true;
   popOverOptions = [
     { title: 'Unsubscribe all', action: 'unSubAll' },
     { title: 'Check out all', action: 'checkOutAll' },
@@ -46,22 +46,20 @@ export class EventPage implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((result) => {
       this.getEvent(result.id);
-      this.subscribedVisibility = true;
     });
 
     if (this.currentUser.role === 'Admin') {
       this.isAdmin = true;
     }
-
-    console.log(this.currentUser);
   }
 
   getEvent(id) {
+    this.loading = true;
     return this.eventService.getById(id).subscribe((result) => {
       this.item = new Event(result);
       this.users = this.getUsers(this.item);
-      this.checkedInCount = this.getCheckedInUsers().length;
-      this.subscribedCount = this.getSubscribedUsers().length;
+      this.getUserCounts(this.users);
+      this.loading = false;
     });
   }
 
@@ -90,7 +88,7 @@ export class EventPage implements OnInit {
     });
   }
 
-  getUsers(item) {
+  getUsers(item): Array<User> {
     if (!item) {
       return [];
     }
@@ -107,20 +105,15 @@ export class EventPage implements OnInit {
     return [...currentUser, ...otherUsers];
   }
 
-  // TODO calculate subbed/checked in by subtracting from total
-  getCheckedInUsers(): Array<User> {
-    return this.filterUsers(this.users, (user) => user.checkedIn);
-  }
-
-  getSubscribedUsers(): Array<User> {
-    return this.filterUsers(this.users, (user) => !user.checkedIn);
-  }
-
-  filterUsers(users, filter) {
+  getUserCounts(users): void {
     if (!users) {
-      return [];
+      this.checkedInCount = 0;
+      this.subscribedCount = 0;
+      return;
     }
-    return users.filter(filter);
+    this.checkedInCount =
+      users.length - users.filter((user) => !user.checkedIn).length;
+    this.subscribedCount = users.length - this.checkedInCount;
   }
 
   createSms(user) {
@@ -138,16 +131,16 @@ export class EventPage implements OnInit {
   }
 
   unSubscribeAll(id) {
-    const item = this.item;
     this.eventService.update(id, 'unSubAll').subscribe(() => {
-      this.getEvent(item.eventId);
+      this.users = [];
+      this.getUserCounts(this.users);
     });
   }
 
   checkOutAll(id) {
-    const item = this.item;
     this.eventService.update(id, 'checkOutAll').subscribe(() => {
-      this.getEvent(item.eventId);
+      this.users.forEach((user) => (user.checkedIn = false));
+      this.getUserCounts(this.users);
     });
   }
 
@@ -160,7 +153,7 @@ export class EventPage implements OnInit {
         data: { field: 'updateEventCheckedIn', value: user.checkedIn },
       })
       .subscribe(() => {
-        this.getEvent(item.eventId);
+        this.getUserCounts(this.users);
       });
   }
 
@@ -173,7 +166,10 @@ export class EventPage implements OnInit {
         data: { field: 'updateSubscribed' },
       })
       .subscribe(() => {
-        this.getEvent(item.eventId);
+        this.users = this.users.filter(
+          (deletedUser) => user._id !== deletedUser._id
+        );
+        this.getUserCounts(this.users);
       });
   }
 
