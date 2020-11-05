@@ -23,8 +23,6 @@ export class AuthService {
       JSON.parse(localStorage.getItem('currentUser'))
     );
     this.currentUser = this.currentUserSubject.asObservable();
-
-    console.log('init authService');
   }
 
   signOut() {
@@ -60,8 +58,6 @@ export class AuthService {
     // if (!this.authenticated) {
     //   return null;
     // }
-
-    console.log('did this');
 
     const graphClient = Client.init({
       // Init graph client
