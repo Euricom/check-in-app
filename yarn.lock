@@ -257,6 +257,20 @@
     minimatch "^3.0.4"
     path "^0.12.7"
 
+"@azure/msal-browser@^2.5.2":
+  version "2.5.2"
+  resolved "https://registry.yarnpkg.com/@azure/msal-browser/-/msal-browser-2.5.2.tgz#ecf78b51978fb22a7500fef63b581b8807e64b0d"
+  integrity sha512-kMEAMO/kLO+jkdV042x1+hfQdYRNFC/bXyFGYjqRzhkJsayBkX0EQcMc9lIUCp+KX3WPjLaas7tAfDWhn5gv4A==
+  dependencies:
+    "@azure/msal-common" "^1.6.3"
+
+"@azure/msal-common@^1.6.3":
+  version "1.6.3"
+  resolved "https://registry.yarnpkg.com/@azure/msal-common/-/msal-common-1.6.3.tgz#13209972c90624dda5e310a876a9dc06a5b8e1c1"
+  integrity sha512-sZQ8gXavWEX7q0aHS8wNdcDWpbVnfLU4mMcX2E9JRHjn7nKACSEmiYNog2y/8vu7cMMV5RWWttF/oFQmeiIgyg==
+  dependencies:
+    debug "^4.1.1"
+
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.10.4", "@babel/code-frame@^7.8.3":
   version "7.10.4"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.10.4.tgz#168da1a36e90da68ae8d49c0f1b48c7c6249213a"

@@ -34,7 +34,7 @@ export class EventsPage implements OnInit {
 
   async ngOnInit() {
     this.user = await this.authService.getOrCreateUser();
-    if (this.user.role === 'Admin') {
+    if (this.user && this.user.role === 'Admin') {
       this.isAdmin = true;
     }
     this.getEvents();

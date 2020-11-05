@@ -1,9 +1,9 @@
 import { Client } from '@microsoft/microsoft-graph-client';
 import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
-import { MsalService } from '@azure/msal-angular';
 import { UserService } from './user.service';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { MsalService } from './../msal';
 
 @Injectable({
   providedIn: 'root',
@@ -17,12 +17,14 @@ export class AuthService {
     private msalService: MsalService,
     private userService: UserService
   ) {
-    this.authenticated = this.msalService.getAccount() != null;
-
+    // TODO do check for authentication
+    // this.authenticated = this.msalService.getAccount() != null;
     this.currentUserSubject = new BehaviorSubject<User>(
       JSON.parse(localStorage.getItem('currentUser'))
     );
     this.currentUser = this.currentUserSubject.asObservable();
+
+    console.log('init authService');
   }
 
   signOut() {
@@ -32,12 +34,22 @@ export class AuthService {
   }
 
   async getAccessToken(): Promise<any> {
-    const result = await this.msalService
-      .acquireTokenSilent({ scopes: ['user.read'] })
+    const authResponse = this.msalService
+      .acquireTokenSilent({
+        scopes: ['user.read'],
+        account: {
+          homeAccountId: '',
+          environment: '',
+          tenantId: '',
+          username: '',
+        },
+      })
+      .toPromise()
       .catch((error) => {
         console.log('Get token failed', JSON.stringify(error));
       });
-    return result;
+
+    return authResponse;
   }
 
   public get currentUserValue(): User {
@@ -45,9 +57,11 @@ export class AuthService {
   }
 
   async getOrCreateUser() {
-    if (!this.authenticated) {
-      return null;
-    }
+    // if (!this.authenticated) {
+    //   return null;
+    // }
+
+    console.log('did this');
 
     const graphClient = Client.init({
       // Init graph client

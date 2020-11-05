@@ -48,7 +48,7 @@ export class EventPage implements OnInit {
       this.getEvent(result.id);
     });
 
-    if (this.currentUser.role === 'Admin') {
+    if (this.currentUser && this.currentUser.role === 'Admin') {
       this.isAdmin = true;
     }
   }

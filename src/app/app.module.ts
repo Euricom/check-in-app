@@ -9,30 +9,38 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-
+import { InterceptorService } from 'src/app/shared/services/interceptor.service';
 import { environment } from 'src/environments/environment';
-import { Configuration } from 'msal';
+
 import {
   MsalService,
-  MsalModule,
-  MSAL_CONFIG,
-  MSAL_CONFIG_ANGULAR,
-  MsalAngularConfiguration,
+  MSAL_INSTANCE,
+  MsalGuard,
   MsalInterceptor,
-} from '@azure/msal-angular';
+  MsalBroadcastService,
+} from './shared/msal';
+import {
+  IPublicClientApplication,
+  PublicClientApplication,
+  InteractionType,
+} from '@azure/msal-browser';
 
-import { InterceptorService } from 'src/app/shared/services/interceptor.service';
+import { MsalInterceptorConfig } from './shared/msal/msal.interceptor.config';
+import {
+  MSAL_GUARD_CONFIG,
+  MSAL_INTERCEPTOR_CONFIG,
+} from './shared/msal/constants';
+import { MsalGuardConfiguration } from './shared/msal/msal.guard.config';
 
 export const protectedResourceMap: [string, string[]][] = [
   ['https://graph.microsoft.com/beta/', ['user.read']],
 ];
 
-function MSALConfigFactory(): Configuration {
-  return {
+function MSALInstanceFactory(): IPublicClientApplication {
+  return new PublicClientApplication({
     auth: {
       clientId: environment.clientId,
       authority: environment.authority,
-      validateAuthority: true,
       redirectUri: environment.redirectUrl,
       postLogoutRedirectUri: environment.redirectUrl,
       navigateToLoginRequestUrl: true,
@@ -40,12 +48,18 @@ function MSALConfigFactory(): Configuration {
     cache: {
       storeAuthStateInCookie: false,
     },
-  };
+  });
 }
 
-function MSALAngularConfigFactory(): MsalAngularConfiguration {
+function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
+  // tslint:disable-next-line:no-shadowed-variable
+  const protectedResourceMap = new Map<string, Array<string>>();
+  protectedResourceMap.set('https://graph.microsoft.com/v1.0/me', [
+    'user.read',
+  ]);
+
   return {
-    popUp: false,
+    interactionType: InteractionType.Popup,
     protectedResourceMap,
   };
 }
@@ -58,24 +72,34 @@ function MSALAngularConfigFactory(): MsalAngularConfiguration {
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
-    MsalModule,
   ],
   providers: [
     StatusBar,
     SplashScreen,
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: MsalInterceptor,
       multi: true,
     },
-    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    { provide: MSAL_CONFIG, useFactory: MSALConfigFactory },
     {
-      provide: MSAL_CONFIG_ANGULAR,
-      useFactory: MSALAngularConfigFactory,
+      provide: MSAL_INSTANCE,
+      useFactory: MSALInstanceFactory,
+    },
+    {
+      provide: MSAL_GUARD_CONFIG,
+      useValue: {
+        interactionType: InteractionType.Redirect,
+      } as MsalGuardConfiguration,
+    },
+    {
+      provide: MSAL_INTERCEPTOR_CONFIG,
+      useFactory: MSALInterceptorConfigFactory,
     },
     MsalService,
+    MsalGuard,
+    MsalBroadcastService,
   ],
   bootstrap: [AppComponent],
 })
