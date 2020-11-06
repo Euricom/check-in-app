@@ -72,6 +72,8 @@ module.exports = async function (context, req) {
       ])
       .toArray();
 
+    context.log(subscriptionCount);
+
     eventsAndUserSubs.forEach((item) => {
       // set if user is subscribed
       if (
@@ -92,13 +94,24 @@ module.exports = async function (context, req) {
       let count = subscriptionCount.find((res) => {
         return res._id === item.eventId;
       });
-      filteredAndSubCount.push({
-        ...item,
-        totalCount: count.totalCount,
-        subCount: count.subCount,
-        checkedInCount: count.checkedInCount,
-      });
+      if (count) {
+        filteredAndSubCount.push({
+          ...item,
+          totalCount: count.totalCount,
+          subCount: count.subCount,
+          checkedInCount: count.checkedInCount,
+        });
+      } else {
+        filteredAndSubCount.push({
+          ...item,
+          totalCount: 0,
+          subCount: 0,
+          checkedInCount: 0,
+        });
+      }
     });
+
+    context.log(filteredAndSubCount);
 
     context.res = { body: filteredAndSubCount };
   } catch (error) {
