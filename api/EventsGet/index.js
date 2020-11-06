@@ -72,8 +72,6 @@ module.exports = async function (context, req) {
       ])
       .toArray();
 
-    context.log(subscriptionCount);
-
     eventsAndUserSubs.forEach((item) => {
       // set if user is subscribed
       if (
@@ -110,8 +108,6 @@ module.exports = async function (context, req) {
         });
       }
     });
-
-    context.log(filteredAndSubCount);
 
     context.res = { body: filteredAndSubCount };
   } catch (error) {

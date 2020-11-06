@@ -33,13 +33,18 @@
                 {{ event.endDate | date:'dd/MM/yyyy' }}
               </p>
             </div>
+            <div class="event__count">
+              {{event.checkedInCount}}/{{ event.totalCount}}
+            </div>
             <div class="event__extra" (click)="onCheckEvent(event)">
               <ion-icon
+                color="primary"
                 size="large"
                 name="checkbox"
                 *ngIf="event.subscribed"
               ></ion-icon>
               <ion-icon
+                color="primary"
                 size="large"
                 name="square-outline"
                 *ngIf="!event.subscribed"

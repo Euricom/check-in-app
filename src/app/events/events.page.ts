@@ -33,6 +33,7 @@ export class EventsPage implements OnInit {
   }
 
   async ngOnInit() {
+    this.loading = true;
     this.user = await this.authService.getOrCreateUser();
     if (this.user && this.user.role === 'Admin') {
       this.isAdmin = true;
@@ -41,7 +42,6 @@ export class EventsPage implements OnInit {
   }
 
   getEvents() {
-    this.loading = true;
     return this.eventService
       .getAll(this.user ? this.user._id : '-')
       .subscribe((res) => {
@@ -76,6 +76,8 @@ export class EventsPage implements OnInit {
         item,
         data: { field: 'updateSubscribed' },
       })
-      .subscribe();
+      .subscribe(() => {
+        this.getEvents();
+      });
   }
 }

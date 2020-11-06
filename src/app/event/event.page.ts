@@ -44,17 +44,16 @@ export class EventPage implements OnInit {
   }
 
   ngOnInit() {
+    this.loading = true;
     this.route.params.subscribe((result) => {
       this.getEvent(result.id);
     });
-
     if (this.currentUser && this.currentUser.role === 'Admin') {
       this.isAdmin = true;
     }
   }
 
   getEvent(id) {
-    this.loading = true;
     return this.eventService.getById(id).subscribe((result) => {
       this.item = new Event(result);
       this.users = this.getUsers(this.item);
