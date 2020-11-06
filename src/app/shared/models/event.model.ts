@@ -4,6 +4,9 @@ export class Event {
   startDate?: string;
   endDate?: string;
   subscribed?: boolean;
+  totalCount: number;
+  subCount: number;
+  checkedInCount: number;
 
   constructor(dto?: IEventDTO) {
     Object.assign(this, dto);
@@ -15,5 +18,4 @@ export interface IEventDTO {
   name: string;
   startDate?: string;
   endDate?: string;
-  subscribed?: boolean;
 }
