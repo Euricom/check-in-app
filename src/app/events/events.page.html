@@ -13,7 +13,7 @@
 
   <ion-list>
     <ion-item-sliding *ngFor="let event of events">
-      <ion-item-options side="start" *ngIf="isAdmin">
+      <ion-item-options side="end" *ngIf="isAdmin">
         <ion-item-option
           color="danger"
           (click)="onDelete(event.eventId)"

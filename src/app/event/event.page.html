@@ -54,7 +54,7 @@
 
   <ion-list>
     <ion-item-sliding *ngFor="let user of users | appFilter: searchText">
-      <ion-item-options side="start" *ngIf="isAdmin">
+      <ion-item-options side="end" *ngIf="isAdmin">
         <ion-item-option color="danger" (click)="onDelete(user)" expandable>
           Delete
         </ion-item-option>
