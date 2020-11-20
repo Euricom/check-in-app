@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Events</ion-title>
-    <ion-buttons slot="end">
+    <ion-buttons slot="start">
       <img class="logo" src="assets/euricom-logo.svg" alt="Euricom Logo" />
     </ion-buttons>
   </ion-toolbar>
@@ -36,9 +36,12 @@
                 {{ event.endDate | date:'dd/MM/yyyy' }}
               </p>
             </div>
-            <div class="event__count">
+            <ion-badge
+              class="event__count"
+              [color]="event.checkedInCount === event.totalCount && event.totalCount !== 0 ? 'success' : 'light'"
+            >
               {{event.checkedInCount}}/{{ event.totalCount}}
-            </div>
+            </ion-badge>
             <div class="event__extra" (click)="onCheckEvent(event)">
               <ion-icon
                 color="primary"

@@ -6,6 +6,10 @@
     flex: 3;
   }
 
+  &__count {
+    margin-right: 10px;
+  }
+
   &__extra {
     margin: 10px;
     margin-bottom: 5px;
@@ -13,7 +17,7 @@
 }
 
 .logo {
-  width: 35px;
-  height: 35px;
-  margin-right: 20px;
+  width: 30px;
+  height: 30px;
+  margin-left: 10px;
 }
