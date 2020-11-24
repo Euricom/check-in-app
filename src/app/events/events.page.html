@@ -18,6 +18,13 @@
     <ion-item-sliding *ngFor="let event of events">
       <ion-item-options side="end" *ngIf="isAdmin">
         <ion-item-option
+          color="medium"
+          (click)="onEdit(event.eventId)"
+          expandable
+        >
+          Edit
+        </ion-item-option>
+        <ion-item-option
           color="danger"
           (click)="onDelete(event.eventId)"
           expandable

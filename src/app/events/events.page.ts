@@ -60,6 +60,10 @@ export class EventsPage implements OnInit {
     this.router.navigate(['event', id]);
   }
 
+  onEdit(id) {
+    console.log('Edit event ' + id);
+  }
+
   onDelete(id): void {
     this.events = this.events.filter((item) => id !== item.eventId);
     this.eventService.delete(id).subscribe();
