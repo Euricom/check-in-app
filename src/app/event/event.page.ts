@@ -203,6 +203,7 @@ export class EventPage implements OnInit {
 
   onCancel(): void {
     this.router.navigateByUrl('/');
+    this.eventService.onNovigateToOverview();
   }
 
   doRefresh(e) {

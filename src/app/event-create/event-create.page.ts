@@ -31,7 +31,7 @@ export class EventCreatePage implements OnInit {
     }
     const newEvent = this.form.value;
     this.eventService.create(newEvent).subscribe(() => {
-      this.eventService.onCreate();
+      this.eventService.onNovigateToOverview();
       this.router.navigateByUrl(`/events`);
     });
   }

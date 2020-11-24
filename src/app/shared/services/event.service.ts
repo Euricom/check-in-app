@@ -41,7 +41,7 @@ export class EventService {
     return this.http.put(`api/event/${id}`, option);
   }
 
-  onCreate() {
+  onNovigateToOverview() {
     this.subject.next();
   }
 

@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./events.page.scss'],
 })
 export class EventsPage implements OnInit {
-  clickEventsubscription: Subscription;
+  clickEventSubscription: Subscription;
   events = Array<Event>();
   user: User;
   isAdmin = false;
@@ -25,7 +25,7 @@ export class EventsPage implements OnInit {
     private authService: AuthService,
     private userSevice: UserService
   ) {
-    this.clickEventsubscription = this.eventService
+    this.clickEventSubscription = this.eventService
       .getCreateEvent()
       .subscribe(() => {
         this.getEvents();
