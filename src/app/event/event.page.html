@@ -68,21 +68,23 @@
               <p>Euricom</p>
             </div>
             <div class="user__controls">
-              <a
-                *ngIf="(user.phoneNumber !== null || undefined || '') && (currentUser && currentUser._id !== user._id)"
-                [href]="createSms(user)"
-                class="user__button user__button--small"
-                target="_blank"
+              <ng-container
+                *ngIf="(user.phoneNumber !== null || undefined || '') && (currentUser && currentUser._id !== user._id) && isAdmin"
               >
-                <ion-icon name="chatbox"></ion-icon>
-              </a>
-              <a
-                *ngIf="(user.phoneNumber !== null || undefined || '') && (currentUser && currentUser._id !== user._id)"
-                [href]="'tel:' + user.phoneNumber"
-                class="user__button user__button--small"
-              >
-                <ion-icon name="call"></ion-icon>
-              </a>
+                <a
+                  [href]="createSms(user)"
+                  class="user__button user__button--small"
+                  target="_blank"
+                >
+                  <ion-icon name="chatbox"></ion-icon>
+                </a>
+                <a
+                  [href]="'tel:' + user.phoneNumber"
+                  class="user__button user__button--small"
+                >
+                  <ion-icon name="call"></ion-icon>
+                </a>
+              </ng-container>
               <ng-container
                 *ngIf="currentUser && currentUser._id === user._id || isAdmin"
               >
