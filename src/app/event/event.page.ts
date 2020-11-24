@@ -7,7 +7,7 @@ import { Event } from '../shared/models/event.model';
 import { User } from '../shared/models/user.model';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UserService } from '../shared/services/user.service';
-import { PopoverController } from '@ionic/angular';
+import { AlertController, PopoverController } from '@ionic/angular';
 
 @Component({
   selector: 'app-event',
@@ -25,8 +25,8 @@ export class EventPage implements OnInit {
   isAdmin = false;
   loading = true;
   popOverOptions = [
-    { title: 'Unsubscribe all', action: 'unSubAll' },
-    { title: 'Check out all', action: 'checkOutAll' },
+    { title: 'Unsubscribe All', action: 'unSubAll' },
+    { title: 'Checkout All', action: 'checkOutAll' },
   ];
 
   constructor(
@@ -36,7 +36,8 @@ export class EventPage implements OnInit {
     private sanitizer: DomSanitizer,
     private userSevice: UserService,
     private authService: AuthService,
-    public popoverController: PopoverController
+    public popoverController: PopoverController,
+    public alertController: AlertController
   ) {
     this.authService.currentUser.subscribe(
       (result) => (this.currentUser = result)
@@ -78,13 +79,44 @@ export class EventPage implements OnInit {
     return await popover.onDidDismiss().then((data: any) => {
       if (data) {
         if (data.data === 'unSubAll') {
-          this.unSubscribeAll(this.item.eventId);
+          this.presentAlert(
+            'Unsubscribe All',
+            'Do you really want to unsubscribe all? This is not reversable.',
+            () => {
+              this.unSubscribeAll(this.item.eventId);
+            }
+          );
         }
         if (data.data === 'checkOutAll') {
-          this.checkOutAll(this.item.eventId);
+          this.presentAlert(
+            'Checkout All',
+            'Do you really want to checkout all? This is not reversable.',
+            () => {
+              this.checkOutAll(this.item.eventId);
+            }
+          );
         }
       }
     });
+  }
+
+  async presentAlert(header, message, okHandler) {
+    const alert = await this.alertController.create({
+      header,
+      message,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+        },
+        {
+          text: 'OK',
+          handler: okHandler,
+        },
+      ],
+    });
+
+    await alert.present();
   }
 
   getUsers(item): Array<User> {
@@ -116,12 +148,9 @@ export class EventPage implements OnInit {
   }
 
   createSms(user) {
-    const message = `Hey${
+    const message = `Dag${
       user.firstName ? ' ' + user.firstName : ''
-    }, We wachten op je voor het Euricom event: ${
-      this.item.name
-    }, kan je zsm bevestigen dat je komt?`;
-
+    }, We wachten op je, kan je even bevestigen of je komt?`;
     return this.sanitizer.bypassSecurityTrustUrl(
       `sms:${encodeURIComponent(user.phoneNumber)}&body=${encodeURIComponent(
         message
