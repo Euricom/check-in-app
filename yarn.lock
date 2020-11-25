@@ -249,6 +249,13 @@
   dependencies:
     tslib "^2.0.0"
 
+"@angular/service-worker@~10.0.0":
+  version "10.0.14"
+  resolved "https://registry.yarnpkg.com/@angular/service-worker/-/service-worker-10.0.14.tgz#c02fef1e247574c1966d2e5c2424d2675c875c87"
+  integrity sha512-/oXyXRC+LFuKACcItG7EJaHe0D24x6KIyh3jg1TkClqWQe0rfVtvcYq+Fday69+gdZOM6euMWjBMoJqXJP7PcA==
+  dependencies:
+    tslib "^2.0.0"
+
 "@azure/msal-browser@^2.5.2":
   version "2.5.2"
   resolved "https://registry.yarnpkg.com/@azure/msal-browser/-/msal-browser-2.5.2.tgz#ecf78b51978fb22a7500fef63b581b8807e64b0d"

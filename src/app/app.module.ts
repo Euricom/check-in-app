@@ -31,6 +31,7 @@ import {
   MSAL_INTERCEPTOR_CONFIG,
 } from './shared/msal/constants';
 import { MsalGuardConfiguration } from './shared/msal/msal.guard.config';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 export const protectedResourceMap: [string, string[]][] = [
   ['https://graph.microsoft.com/beta/', ['user.read']],
@@ -72,6 +73,7 @@ function MSALInterceptorConfigFactory(): MsalInterceptorConfig {
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   providers: [
     StatusBar,
