@@ -54,12 +54,9 @@
 
   <ion-list>
     <ng-container *ngFor="let user of users | appFilter: searchText">
-      <ion-item-sliding
-        (ionSwipe)="onDelete(user)"
-        *ngIf="setUserVisiblilty(user)"
-      >
+      <ion-item-sliding *ngIf="setUserVisiblilty(user)">
         <ion-item-options side="end" *ngIf="isAdmin">
-          <ion-item-option color="danger" (click)="onDelete(user)" expandable>
+          <ion-item-option color="danger" (click)="onDelete(user)">
             Delete
           </ion-item-option>
         </ion-item-options>

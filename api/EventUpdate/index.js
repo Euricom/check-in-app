@@ -6,24 +6,18 @@ module.exports = async function (context, req) {
 
   try {
     const database = await loadDB();
-
-    context.log('api call triggered');
-
     if (option === 'updateEvent') {
-      context.log('we got an update');
       const item = req.body.item;
-      let event = await database
-        .collection('events')
-        .update(
-          { eventId: id },
-          {
-            $set: {
-              name: item.name,
-              startDate: item.startDate,
-              endDate: item.endDate,
-            },
-          }
-        );
+      let event = await database.collection('events').update(
+        { eventId: id },
+        {
+          $set: {
+            name: item.name,
+            startDate: item.startDate,
+            endDate: item.endDate,
+          },
+        }
+      );
       context.res = { body: event };
     }
 

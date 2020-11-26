@@ -11,9 +11,7 @@ export class PopOverListComponent implements OnInit {
   @Input() listItems: Array<any>;
   @Output() listItemClick = new EventEmitter<any>();
 
-  ngOnInit() {
-    //  console.log(this.listItems);
-  }
+  ngOnInit() {}
 
   public listItemClicked(option) {
     this.popover.dismiss(option);

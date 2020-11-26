@@ -46,7 +46,6 @@ export class EventCreatePage implements OnInit {
     await this.eventService.getById(id).subscribe((result) => {
       this.item = new Event(result);
       this.initFrom();
-      console.log(result);
     });
   }
 
@@ -64,7 +63,6 @@ export class EventCreatePage implements OnInit {
     }
 
     if (this.editMode) {
-      console.log('updating...');
       this.eventService
         .update(this.routeId, {
           option: 'updateEvent',

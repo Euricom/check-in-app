@@ -40,8 +40,6 @@ export class EventService {
   }
 
   update(id, option) {
-    console.log(id);
-    console.log('update triggered in service');
     return this.http.put(`api/event/${id}`, option);
   }
 
