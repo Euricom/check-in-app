@@ -65,7 +65,13 @@
     </ion-item-sliding>
   </ion-list>
 
-  <ion-fab *ngIf="isAdmin" vertical="bottom" horizontal="center" slot="fixed">
+  <ion-fab
+    *ngIf="isAdmin"
+    vertical="bottom"
+    horizontal="center"
+    slot="fixed"
+    style="margin-bottom: 20px"
+  >
     <ion-fab-button (click)="createEvent()">
       <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>
