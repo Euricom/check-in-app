@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-button (click)="onCancel()">Cancel</ion-button>
     </ion-buttons>
-    <ion-title>New Event</ion-title>
+    <ion-title>{{ title }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -34,7 +34,7 @@
 
     <div class="form__buttons">
       <ion-button color="primary" expand="block" type="submit"
-        >Create Event</ion-button
+        >{{ editMode ? 'Update event': 'Create Event' }}</ion-button
       >
     </div>
   </form>

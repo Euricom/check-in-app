@@ -8,7 +8,9 @@ import { Event, IEventDTO } from './../models/event.model';
   providedIn: 'root',
 })
 export class EventService {
-  private subject = new Subject<any>();
+  private navigationSubject = new Subject<any>();
+  private clickedEventSubject = new Subject<any>();
+
   constructor(private http: HttpClient) {}
 
   getAll(userId): Observable<Event[]> {
@@ -38,14 +40,24 @@ export class EventService {
   }
 
   update(id, option) {
+    console.log(id);
+    console.log('update triggered in service');
     return this.http.put(`api/event/${id}`, option);
   }
 
   onNovigateToOverview() {
-    this.subject.next();
+    this.navigationSubject.next();
   }
 
   getCreateEvent(): Observable<any> {
-    return this.subject.asObservable();
+    return this.navigationSubject.asObservable();
+  }
+
+  onEventClick(event: Event) {
+    this.clickedEventSubject.next(event);
+  }
+
+  getClickedEvent(): Observable<Event> {
+    return this.clickedEventSubject.asObservable();
   }
 }

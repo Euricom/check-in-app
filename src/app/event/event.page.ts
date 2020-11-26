@@ -159,14 +159,14 @@ export class EventPage implements OnInit {
   }
 
   unSubscribeAll(id) {
-    this.eventService.update(id, 'unSubAll').subscribe(() => {
+    this.eventService.update(id, {option: 'unSubAll'}).subscribe(() => {
       this.users = [];
       this.getUserCounts(this.users);
     });
   }
 
   checkOutAll(id) {
-    this.eventService.update(id, 'checkOutAll').subscribe(() => {
+    this.eventService.update(id, {option: 'checkOutAll'}).subscribe(() => {
       this.users.forEach((user) => (user.checkedIn = false));
       this.getUserCounts(this.users);
     });

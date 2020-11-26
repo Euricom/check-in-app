@@ -25,6 +25,14 @@ const routes: Routes = [
     canActivate: [MsalGuard, AdminGuard],
   },
   {
+    path: 'events/edit/:id',
+    loadChildren: () =>
+      import('./event-create/event-create.module').then(
+        (m) => m.EventCreatePageModule
+      ),
+    canActivate: [MsalGuard, AdminGuard],
+  },
+  {
     path: 'event/:id',
     loadChildren: () =>
       import('./event/event.module').then((m) => m.EventPageModule),

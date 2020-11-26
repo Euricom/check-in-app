@@ -16,11 +16,14 @@
 
   <ion-list>
     <ion-item-sliding *ngFor="let event of events">
-      <ion-item-options side="end" *ngIf="isAdmin">
+      <ion-item-options
+        side="end"
+        *ngIf="isAdmin"
+        (ionSwipe)="onDelete(event.eventId)"
+      >
         <ion-item-option
           color="medium"
-          (click)="onEdit(event.eventId)"
-          expandable
+          [routerLink]="'/events/edit/' + event.eventId"
         >
           Edit
         </ion-item-option>

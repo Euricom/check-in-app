@@ -2,10 +2,30 @@ const loadDB = require('../shared/mongo');
 
 module.exports = async function (context, req) {
   const id = parseInt(req.params.id);
-  const option = req.body;
+  const option = req.body.option;
 
   try {
     const database = await loadDB();
+
+    context.log('api call triggered');
+
+    if (option === 'updateEvent') {
+      context.log('we got an update');
+      const item = req.body.item;
+      let event = await database
+        .collection('events')
+        .update(
+          { eventId: id },
+          {
+            $set: {
+              name: item.name,
+              startDate: item.startDate,
+              endDate: item.endDate,
+            },
+          }
+        );
+      context.res = { body: event };
+    }
 
     if (option === 'unSubAll') {
       let users = await database.collection('users').update(

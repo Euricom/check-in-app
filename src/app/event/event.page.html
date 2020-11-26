@@ -53,61 +53,66 @@
   <ion-searchbar [(ngModel)]="searchText"></ion-searchbar>
 
   <ion-list>
-    <ion-item-sliding *ngFor="let user of users | appFilter: searchText">
-      <ion-item-options side="end" *ngIf="isAdmin">
-        <ion-item-option color="danger" (click)="onDelete(user)" expandable>
-          Delete
-        </ion-item-option>
-      </ion-item-options>
+    <ng-container *ngFor="let user of users | appFilter: searchText">
+      <ion-item-sliding
+        (ionSwipe)="onDelete(user)"
+        *ngIf="setUserVisiblilty(user)"
+      >
+        <ion-item-options side="end" *ngIf="isAdmin">
+          <ion-item-option color="danger" (click)="onDelete(user)" expandable>
+            Delete
+          </ion-item-option>
+        </ion-item-options>
 
-      <ion-item *ngIf="setUserVisiblilty(user)">
-        <ion-label>
-          <div class="user">
-            <div class="user__labels">
-              <h2>{{ user.firstName + ' ' + user.lastName }}</h2>
-              <p>Euricom</p>
-            </div>
-            <div class="user__controls">
-              <ng-container
-                *ngIf="(user.phoneNumber !== null || undefined || '') && (currentUser && currentUser._id !== user._id) && isAdmin"
-              >
-                <a
-                  [href]="createSms(user)"
-                  class="user__button user__button--small"
-                  target="_blank"
+        <ion-item>
+          <ion-label>
+            <div class="user">
+              <div class="user__labels">
+                <h2>{{ user.firstName + ' ' + user.lastName }}</h2>
+                <p>Euricom</p>
+              </div>
+              <div class="user__controls">
+                <ng-container
+                  *ngIf="(user.phoneNumber !== null || undefined || '') && (currentUser && currentUser._id !== user._id) && isAdmin"
                 >
-                  <ion-icon name="chatbox"></ion-icon>
-                </a>
-                <a
-                  [href]="'tel:' + user.phoneNumber"
-                  class="user__button user__button--small"
+                  <a
+                    [href]="createSms(user)"
+                    class="user__button user__button--small"
+                    target="_blank"
+                  >
+                    <ion-icon name="chatbox"></ion-icon>
+                  </a>
+                  <a
+                    [href]="'tel:' + user.phoneNumber"
+                    class="user__button user__button--small"
+                  >
+                    <ion-icon name="call"></ion-icon>
+                  </a>
+                </ng-container>
+                <ng-container
+                  *ngIf="currentUser && currentUser._id === user._id || isAdmin"
                 >
-                  <ion-icon name="call"></ion-icon>
-                </a>
-              </ng-container>
-              <ng-container
-                *ngIf="currentUser && currentUser._id === user._id || isAdmin"
-              >
-                <div
-                  *ngIf="!user.checkedIn"
-                  class="user__button user__button--success"
-                  (click)="onCheckinClick(user)"
-                >
-                  <ion-icon size="large" name="checkmark-outline"></ion-icon>
-                </div>
+                  <div
+                    *ngIf="!user.checkedIn"
+                    class="user__button user__button--success"
+                    (click)="onCheckinClick(user)"
+                  >
+                    <ion-icon size="large" name="checkmark-outline"></ion-icon>
+                  </div>
 
-                <div
-                  *ngIf="user.checkedIn"
-                  class="user__button user__button--danger"
-                  (click)="onCheckinClick(user)"
-                >
-                  <ion-icon size="large" name="close-outline"></ion-icon>
-                </div>
-              </ng-container>
+                  <div
+                    *ngIf="user.checkedIn"
+                    class="user__button user__button--danger"
+                    (click)="onCheckinClick(user)"
+                  >
+                    <ion-icon size="large" name="close-outline"></ion-icon>
+                  </div>
+                </ng-container>
+              </div>
             </div>
-          </div>
-        </ion-label>
-      </ion-item>
-    </ion-item-sliding>
+          </ion-label>
+        </ion-item>
+      </ion-item-sliding>
+    </ng-container>
   </ion-list>
 </ion-content>

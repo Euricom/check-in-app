@@ -14,6 +14,8 @@ module.exports = async function (context, req) {
             _id: '$_id',
             eventId: { $first: '$eventId' },
             name: { $first: '$name' },
+            startDate: { $first: '$startDate' },
+            endDate: { $first: '$endDate' },
           },
         },
       ])
