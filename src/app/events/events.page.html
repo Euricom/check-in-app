@@ -20,6 +20,7 @@
         <ion-item-option
           color="medium"
           [routerLink]="'/events/edit/' + event.eventId"
+          (click)="onEdit(slidingItem)"
         >
           Edit
         </ion-item-option>

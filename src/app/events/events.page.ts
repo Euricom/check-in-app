@@ -2,10 +2,11 @@ import { UserService } from './../shared/services/user.service';
 import { AuthService } from './../shared/services/auth.service';
 import { EventService } from './../shared/services/event.service';
 import { Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Event } from '../shared/models/event.model';
 import { User } from '../shared/models/user.model';
 import { Subscription } from 'rxjs';
+import { IonItemSliding } from '@ionic/angular';
 
 @Component({
   selector: 'app-events',
@@ -18,6 +19,7 @@ export class EventsPage implements OnInit {
   user: User;
   isAdmin = false;
   loading = true;
+  @ViewChild(IonItemSliding) slidingItem: IonItemSliding;
 
   constructor(
     private eventService: EventService,
@@ -58,6 +60,10 @@ export class EventsPage implements OnInit {
 
   goDetail(id): void {
     this.router.navigate(['event', id]);
+  }
+
+  onEdit(slidingItem: IonItemSliding) {
+    slidingItem.close();
   }
 
   onDelete(id): void {
