@@ -2,7 +2,7 @@ import { UserService } from './../shared/services/user.service';
 import { AuthService } from './../shared/services/auth.service';
 import { EventService } from './../shared/services/event.service';
 import { Router } from '@angular/router';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Event } from '../shared/models/event.model';
 import { User } from '../shared/models/user.model';
 import { Subscription } from 'rxjs';
@@ -13,7 +13,7 @@ import { IonItemSliding } from '@ionic/angular';
   templateUrl: './events.page.html',
   styleUrls: ['./events.page.scss'],
 })
-export class EventsPage implements OnInit {
+export class EventsPage implements OnInit, OnDestroy {
   clickEventSubscription: Subscription;
   events = Array<Event>();
   user: User;
@@ -85,5 +85,9 @@ export class EventsPage implements OnInit {
       .subscribe(() => {
         this.getEvents();
       });
+  }
+
+  ngOnDestroy(): void {
+    this.clickEventSubscription.unsubscribe();
   }
 }

@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="onCancel()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="onAdd()">Add Users</ion-button>
+    </ion-buttons>
+    <ion-title>{{ title }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let item of users">
+      <ion-label>
+        {{
+          users.length
+            ? item.firstName + " " + item.lastName
+            : "No users found to add..."
+        }}
+      </ion-label>
+      <ion-checkbox
+        slot="end"
+        [(ngModel)]="item.isChecked"
+        (ionChange)="onChecked(item)"
+      ></ion-checkbox>
+    </ion-item>
+  </ion-list>
+</ion-content>

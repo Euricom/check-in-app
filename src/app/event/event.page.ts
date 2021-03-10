@@ -1,20 +1,27 @@
+import { UserListComponent } from './../components/user-list/user-list.component';
 import { AuthService } from './../shared/services/auth.service';
 import { PopOverListComponent } from './../components/pop-over-list/pop-over-list.component';
 import { EventService } from './../shared/services/event.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Event } from '../shared/models/event.model';
 import { User } from '../shared/models/user.model';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UserService } from '../shared/services/user.service';
-import { AlertController, PopoverController } from '@ionic/angular';
+import {
+  AlertController,
+  ModalController,
+  PopoverController,
+} from '@ionic/angular';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-event',
   templateUrl: './event.page.html',
   styleUrls: ['./event.page.scss'],
 })
-export class EventPage implements OnInit {
+export class EventPage implements OnInit, OnDestroy {
+  subscriptions: Array<Subscription> = new Array<Subscription>();
   item: Event;
   checkedInCount = 0;
   subscribedCount = 0;
@@ -25,9 +32,11 @@ export class EventPage implements OnInit {
   isAdmin = false;
   loading = true;
   popOverOptions = [
+    { title: 'Add Users', action: 'addUsers' },
     { title: 'Unsubscribe All', action: 'unSubAll' },
     { title: 'Checkout All', action: 'checkOutAll' },
   ];
+  userAddOptions = [{}];
 
   constructor(
     private eventService: EventService,
@@ -37,21 +46,27 @@ export class EventPage implements OnInit {
     private userSevice: UserService,
     private authService: AuthService,
     public popoverController: PopoverController,
-    public alertController: AlertController
+    public alertController: AlertController,
+    public modalController: ModalController
   ) {
-    this.authService.currentUser.subscribe(
+    const sub = this.authService.currentUser.subscribe(
       (result) => (this.currentUser = result)
     );
+
+    this.subscriptions.push(sub);
   }
 
   ngOnInit() {
     this.loading = true;
-    this.route.params.subscribe((result) => {
+    const sub = this.route.params.subscribe((result) => {
       this.getEvent(result.id);
     });
+
     if (this.currentUser && this.currentUser.role === 'Admin') {
       this.isAdmin = true;
     }
+
+    this.subscriptions.push(sub);
   }
 
   getEvent(id) {
@@ -96,6 +111,10 @@ export class EventPage implements OnInit {
             }
           );
         }
+        if (data.data === 'addUsers') {
+          console.log('add users');
+          this.presentModal();
+        }
       }
     });
   }
@@ -119,20 +138,34 @@ export class EventPage implements OnInit {
     await alert.present();
   }
 
+  async presentModal() {
+    const modal = await this.modalController.create({
+      component: UserListComponent,
+      componentProps: {
+        eventId: this.item.eventId,
+      },
+    });
+    return await modal.present();
+  }
+
   getUsers(item): Array<User> {
     if (!item) {
       return [];
     }
+
     if (!this.currentUser) {
       return item.users.filter((user) => Object.keys(user).length !== 0);
     }
+
     const currentUser = item.users.filter(
       (user) => this.currentUser._id === user._id
     );
+
     const otherUsers = item.users.filter(
       (user) =>
         this.currentUser._id !== user._id && Object.keys(user).length !== 0
     );
+
     return [...currentUser, ...otherUsers];
   }
 
@@ -142,8 +175,10 @@ export class EventPage implements OnInit {
       this.subscribedCount = 0;
       return;
     }
+
     this.checkedInCount =
       users.length - users.filter((user) => !user.checkedIn).length;
+
     this.subscribedCount = users.length - this.checkedInCount;
   }
 
@@ -159,14 +194,14 @@ export class EventPage implements OnInit {
   }
 
   unSubscribeAll(id) {
-    this.eventService.update(id, {option: 'unSubAll'}).subscribe(() => {
+    this.eventService.update(id, { option: 'unSubAll' }).subscribe(() => {
       this.users = [];
       this.getUserCounts(this.users);
     });
   }
 
   checkOutAll(id) {
-    this.eventService.update(id, {option: 'checkOutAll'}).subscribe(() => {
+    this.eventService.update(id, { option: 'checkOutAll' }).subscribe(() => {
       this.users.forEach((user) => (user.checkedIn = false));
       this.getUserCounts(this.users);
     });
@@ -175,6 +210,7 @@ export class EventPage implements OnInit {
   onCheckinClick(user) {
     const item = this.item;
     user.checkedIn = !user.checkedIn;
+
     this.userSevice
       .updateUser(user._id, {
         item,
@@ -210,5 +246,9 @@ export class EventPage implements OnInit {
     this.getEvent(this.item.eventId).add(() => {
       e.target.complete();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((x: Subscription) => x.unsubscribe());
   }
 }

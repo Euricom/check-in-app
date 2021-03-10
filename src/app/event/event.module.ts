@@ -1,3 +1,4 @@
+import { UserListComponent } from './../components/user-list/user-list.component';
 import { PopOverListComponent } from './../components/pop-over-list/pop-over-list.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -12,6 +13,11 @@ import { FilterPipe } from '../shared/pipes/filter.pipe';
 
 @NgModule({
   imports: [CommonModule, FormsModule, IonicModule, EventPageRoutingModule],
-  declarations: [EventPage, FilterPipe, PopOverListComponent],
+  declarations: [
+    EventPage,
+    FilterPipe,
+    PopOverListComponent,
+    UserListComponent,
+  ],
 })
 export class EventPageModule {}

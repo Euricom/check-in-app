@@ -12,6 +12,16 @@ export class UserService {
 
   // TODO check if map function is needed
 
+  getAll(): Observable<User[]> {
+    return this.http.get<IUserDTO[]>(`api/users`).pipe(
+      map((results) => {
+        return results.map((result) => {
+          return new User(result);
+        });
+      })
+    );
+  }
+
   getById(id): Observable<User> {
     return this.http.get<IUserDTO>(`api/user/${id}`).pipe(
       map((result) => {
