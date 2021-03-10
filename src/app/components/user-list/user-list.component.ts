@@ -38,17 +38,33 @@ export class UserListComponent implements OnInit {
 
   getUsers() {
     this.userSevice.getAll().subscribe((res) => {
-      this.users = res;
-      this.fiterSubscribedUsers();
+      this.fiterSubscribedUsers(res);
     });
   }
 
-  fiterSubscribedUsers(): Array<User> {
-    const filteredUsers = this.users.filter((user) =>
-      user.subscriptions.find((event) => event.id === this.eventId)
+  fiterSubscribedUsers(users) {
+    const unSubscribedUsers = users.filter(
+      (user) =>
+        user.subscribed.find((event) => event.id === this.eventId) === undefined
     );
-    return filteredUsers;
+    const subscribedUsers = users
+      .filter(
+        (user) =>
+          user.subscribed.find((event) => event.id === this.eventId) !==
+          undefined
+      )
+      .map((user) => {
+        return { ...user, disabled: true };
+      });
+
+    this.users = [...unSubscribedUsers, ...subscribedUsers];
   }
 
-  onAdd(): void {}
+  onAdd(): void {
+    const usersToAdd = this.users.filter((user) => user.toAdd === true);
+    this.modalController.dismiss({
+      dismissed: true,
+      addedUsers: usersToAdd,
+    });
+  }
 }

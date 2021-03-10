@@ -145,6 +145,11 @@ export class EventPage implements OnInit, OnDestroy {
         eventId: this.item.eventId,
       },
     });
+
+    modal.onDidDismiss().then((data) => {
+      console.log(data.data.addedUsers);
+    });
+
     return await modal.present();
   }
 

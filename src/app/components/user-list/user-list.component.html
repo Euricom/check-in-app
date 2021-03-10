@@ -22,7 +22,8 @@
       </ion-label>
       <ion-checkbox
         slot="end"
-        [(ngModel)]="item.isChecked"
+        [disabled]="item.disabled"
+        [(ngModel)]="item.toAdd"
         (ionChange)="onChecked(item)"
       ></ion-checkbox>
     </ion-item>
