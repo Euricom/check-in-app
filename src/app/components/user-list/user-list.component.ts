@@ -32,7 +32,11 @@ export class UserListComponent implements OnInit {
   }
 
   setCheckAll(event) {
-    this.users.forEach((user) => (user.toAdd = event.detail.checked));
+    this.users.forEach((user) => {
+      if (!user.disabled) {
+        user.toAdd = event.detail.checked;
+      }
+    });
   }
 
   fiterSubscribedUsers(users) {

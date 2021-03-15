@@ -16,7 +16,7 @@
 
   <ion-toolbar *ngIf="!allSubscribed">
     <ion-item lines="none" (ionChange)="setCheckAll($event)">
-      <ion-label color="primary"> check / uncheck all </ion-label>
+      <ion-label color="primary"> Check / Uncheck all </ion-label>
       <ion-checkbox slot="end"></ion-checkbox>
     </ion-item>
   </ion-toolbar>
@@ -26,8 +26,8 @@
 <ion-content>
   <ion-list>
     <ion-item color="secondary" *ngIf="allSubscribed" lines="none">
-      <ion-icon name="checkmark-circle"></ion-icon>
-      <ion-label>All known users are subscribed to this event</ion-label>
+      <ion-icon name="checkmark-circle" slot="start"></ion-icon>
+      <ion-label>All known users are subscribed!</ion-label>
     </ion-item>
     <ion-item
       *ngFor="let item of users | appFilter: searchText; let last = last"
