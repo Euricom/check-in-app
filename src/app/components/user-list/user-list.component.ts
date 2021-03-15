@@ -33,7 +33,6 @@ export class UserListComponent implements OnInit {
 
   setCheckAll(event) {
     this.users.forEach((user) => (user.toAdd = event.detail.checked));
-    console.log(this.users);
   }
 
   fiterSubscribedUsers(users) {
@@ -60,7 +59,6 @@ export class UserListComponent implements OnInit {
 
   onAdd(): void {
     const usersToAdd = this.users.filter((user) => user.toAdd === true);
-    console.log(usersToAdd);
 
     this.modalController.dismiss({
       dismissed: true,

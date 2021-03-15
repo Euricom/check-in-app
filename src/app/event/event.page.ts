@@ -149,7 +149,7 @@ export class EventPage implements OnInit, OnDestroy {
       const usersToAdd = data.data.addedUsers;
       const userIds = [];
 
-      if (usersToAdd.length !== 0) {
+      if (usersToAdd && usersToAdd.length !== 0) {
         usersToAdd.forEach((user) => userIds.push(user._id));
 
         this.userSevice

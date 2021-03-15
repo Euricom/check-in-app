@@ -14,7 +14,7 @@
     <ion-searchbar [(ngModel)]="searchText"></ion-searchbar>
   </ion-toolbar>
 
-  <ion-toolbar>
+  <ion-toolbar *ngIf="!allSubscribed">
     <ion-item lines="none" (ionChange)="setCheckAll($event)">
       <ion-label color="primary"> check / uncheck all </ion-label>
       <ion-checkbox slot="end"></ion-checkbox>
