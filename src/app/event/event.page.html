@@ -16,36 +16,38 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
+  <ion-toolbar class="banner__container">
+    <div class="banner">
+      <div class="segment__container">
+        <div class="segment__counters">
+          <div class="count">{{ subscribedCount }}</div>
+          <div class="count">{{ checkedInCount }}</div>
+        </div>
+
+        <div class="segment__bar">
+          <div
+            class="segment"
+            (click)="subscribedVisibility = true"
+            [ngClass]="{'segment--selected' : subscribedVisibility}"
+          >
+            Subscribed
+          </div>
+          <div
+            class="segment"
+            (click)="subscribedVisibility = false"
+            [ngClass]="{'segment--selected' : !subscribedVisibility}"
+          >
+            Checked In
+          </div>
+        </div>
+      </div>
+    </div></ion-toolbar
+  >
 
   <ion-progress-bar *ngIf="loading" type="indeterminate"></ion-progress-bar>
 </ion-header>
 
 <ion-content>
-  <div class="banner">
-    <div class="segment__container">
-      <div class="segment__counters">
-        <div class="count">{{ subscribedCount }}</div>
-        <div class="count">{{ checkedInCount }}</div>
-      </div>
-
-      <div class="segment__bar">
-        <div
-          class="segment"
-          (click)="subscribedVisibility = true"
-          [ngClass]="{'segment--selected' : subscribedVisibility}"
-        >
-          Subscribed
-        </div>
-        <div
-          class="segment"
-          (click)="subscribedVisibility = false"
-          [ngClass]="{'segment--selected' : !subscribedVisibility}"
-        >
-          Checked In
-        </div>
-      </div>
-    </div>
-  </div>
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
