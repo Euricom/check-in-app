@@ -1,3 +1,5 @@
+import { User } from './user.model';
+
 export class Event {
   eventId: number;
   name: string;
@@ -7,6 +9,7 @@ export class Event {
   totalCount: number;
   subCount: number;
   checkedInCount: number;
+  users?: Array<User>;
 
   constructor(dto?: IEventDTO) {
     Object.assign(this, dto);

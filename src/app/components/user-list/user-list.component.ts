@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { User } from 'src/app/shared/models/user.model';
 import { UserService } from 'src/app/shared/services/user.service';
 
 @Component({
@@ -9,9 +8,11 @@ import { UserService } from 'src/app/shared/services/user.service';
   styleUrls: ['./user-list.component.scss'],
 })
 export class UserListComponent implements OnInit {
-  modalCtrl;
   title = 'Add Users';
   users: Array<any>;
+  allSubscribed = false;
+  loading = true;
+  searchText = '';
   @Input() eventId: string;
 
   constructor(
@@ -21,25 +22,18 @@ export class UserListComponent implements OnInit {
 
   ngOnInit() {
     this.getUsers();
-    console.log(this.eventId);
-  }
-
-  onChecked(user) {
-    console.log(user);
-    console.table(this.users);
-  }
-
-  onCancel(): void {
-    this.modalController.dismiss({
-      dismissed: true,
-    });
-    // this.eventService.onNovigateToOverview();
   }
 
   getUsers() {
     this.userSevice.getAll().subscribe((res) => {
       this.fiterSubscribedUsers(res);
+      this.loading = false;
     });
+  }
+
+  setCheckAll(event) {
+    this.users.forEach((user) => (user.toAdd = event.detail.checked));
+    console.log(this.users);
   }
 
   fiterSubscribedUsers(users) {
@@ -57,14 +51,26 @@ export class UserListComponent implements OnInit {
         return { ...user, disabled: true };
       });
 
+    if (unSubscribedUsers.length === 0) {
+      this.allSubscribed = true;
+    }
+
     this.users = [...unSubscribedUsers, ...subscribedUsers];
   }
 
   onAdd(): void {
     const usersToAdd = this.users.filter((user) => user.toAdd === true);
+    console.log(usersToAdd);
+
     this.modalController.dismiss({
       dismissed: true,
       addedUsers: usersToAdd,
+    });
+  }
+
+  onCancel(): void {
+    this.modalController.dismiss({
+      dismissed: true,
     });
   }
 }

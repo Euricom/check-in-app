@@ -72,7 +72,7 @@ export class EventPage implements OnInit, OnDestroy {
   getEvent(id) {
     return this.eventService.getById(id).subscribe((result) => {
       this.item = new Event(result);
-      this.users = this.getUsers(this.item);
+      this.users = this.sortUsers(this.item.users);
       this.getUserCounts(this.users);
       this.loading = false;
     });
@@ -112,7 +112,6 @@ export class EventPage implements OnInit, OnDestroy {
           );
         }
         if (data.data === 'addUsers') {
-          console.log('add users');
           this.presentModal();
         }
       }
@@ -147,26 +146,40 @@ export class EventPage implements OnInit, OnDestroy {
     });
 
     modal.onDidDismiss().then((data) => {
-      console.log(data.data.addedUsers);
+      const usersToAdd = data.data.addedUsers;
+      const userIds = [];
+
+      if (usersToAdd.length !== 0) {
+        usersToAdd.forEach((user) => userIds.push(user._id));
+
+        this.userSevice
+          .subscribeManyToEvent(this.item.eventId, userIds)
+          .subscribe();
+
+        usersToAdd.forEach((user) => {
+          this.users.push(user);
+        });
+
+        this.getUserCounts(this.users);
+      }
     });
 
     return await modal.present();
   }
 
-  getUsers(item): Array<User> {
-    if (!item) {
+  sortUsers(users): Array<User> {
+    if (!users) {
       return [];
     }
 
     if (!this.currentUser) {
-      return item.users.filter((user) => Object.keys(user).length !== 0);
+      return users.filter((user) => Object.keys(user).length !== 0);
     }
-
-    const currentUser = item.users.filter(
+    const currentUser = users.filter(
       (user) => this.currentUser._id === user._id
     );
 
-    const otherUsers = item.users.filter(
+    const otherUsers = users.filter(
       (user) =>
         this.currentUser._id !== user._id && Object.keys(user).length !== 0
     );

@@ -41,4 +41,8 @@ export class UserService {
   updateUser(id, item) {
     return this.http.put(`api/user/${id}`, item);
   }
+
+  subscribeManyToEvent(eventId, users) {
+    return this.http.put(`api/users/event/${eventId}`, users);
+  }
 }

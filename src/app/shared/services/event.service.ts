@@ -47,6 +47,10 @@ export class EventService {
     this.navigationSubject.next();
   }
 
+  onNovigateToEvent() {
+    this.navigationSubject.next();
+  }
+
   getCreateEvent(): Observable<any> {
     return this.navigationSubject.asObservable();
   }

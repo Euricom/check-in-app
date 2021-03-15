@@ -1,6 +1,6 @@
 const loadDB = require('../shared/mongo');
 
-module.exports = async function (context, req) {
+module.exports = async function (context) {
   try {
     const database = await loadDB();
     let users = await database
@@ -14,6 +14,7 @@ module.exports = async function (context, req) {
             subscribed: { $first: '$subscribed' },
           },
         },
+        { $sort: { firstName: 1, lastName: 1 } },
       ])
       .toArray();
 

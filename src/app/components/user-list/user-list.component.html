@@ -4,15 +4,35 @@
       <ion-button (click)="onCancel()">Cancel</ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button (click)="onAdd()">Add Users</ion-button>
+      <ion-button (click)="onAdd()" [disabled]="allSubscribed"
+        >Add Users</ion-button
+      >
     </ion-buttons>
     <ion-title>{{ title }}</ion-title>
   </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar [(ngModel)]="searchText"></ion-searchbar>
+  </ion-toolbar>
+
+  <ion-toolbar>
+    <ion-item lines="none" (ionChange)="setCheckAll($event)">
+      <ion-label color="primary"> check / uncheck all </ion-label>
+      <ion-checkbox slot="end"></ion-checkbox>
+    </ion-item>
+  </ion-toolbar>
+  <ion-progress-bar *ngIf="loading" type="indeterminate"></ion-progress-bar>
 </ion-header>
 
 <ion-content>
   <ion-list>
-    <ion-item *ngFor="let item of users">
+    <ion-item color="secondary" *ngIf="allSubscribed" lines="none">
+      <ion-icon name="checkmark-circle"></ion-icon>
+      <ion-label>All known users are subscribed to this event</ion-label>
+    </ion-item>
+    <ion-item
+      *ngFor="let item of users | appFilter: searchText; let last = last"
+      [lines]="last ? 'none' : 'inset'"
+    >
       <ion-label>
         {{
           users.length
@@ -24,7 +44,6 @@
         slot="end"
         [disabled]="item.disabled"
         [(ngModel)]="item.toAdd"
-        (ionChange)="onChecked(item)"
       ></ion-checkbox>
     </ion-item>
   </ion-list>
