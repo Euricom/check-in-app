@@ -2,7 +2,7 @@ const loadDB = require('../shared/mongo');
 // const auth = require('../shared/auth');
 
 module.exports = async function (context, req) {
-  const members = req.params.body;
+  const members = req.body;
   // const members = [
   //   {
   //     _id: '3ee83cb0-0b0d-4d50-a52d-e72969fdd173',

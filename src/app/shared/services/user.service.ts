@@ -46,6 +46,6 @@ export class UserService {
   }
 
   syncUsers(members): Observable<User> {
-    return this.http.post<IUserDTO>(`api/sync`, members);
+    return this.http.put<IUserDTO>(`api/sync`, members);
   }
 }

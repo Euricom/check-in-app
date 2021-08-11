@@ -131,6 +131,6 @@ export class AuthService {
         })
     );
 
-    this.userService.syncUsers(mappedMembers);
+    this.userService.syncUsers(mappedMembers).subscribe();
   }
 }
