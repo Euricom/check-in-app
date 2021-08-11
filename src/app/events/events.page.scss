@@ -3,7 +3,11 @@
   align-items: center;
 
   &__info {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     flex: 3;
+
     p {
       color: #747474;
     }

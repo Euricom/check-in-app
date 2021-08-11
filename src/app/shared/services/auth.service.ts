@@ -1,3 +1,4 @@
+import { environment } from 'src/environments/environment';
 import { Client } from '@microsoft/microsoft-graph-client';
 import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
@@ -96,5 +97,40 @@ export class AuthService {
     localStorage.setItem('currentUser', JSON.stringify(authUser));
     this.currentUserSubject.next(authUser);
     return authUser;
+  }
+
+  async syncADGroupMembers(): Promise<void> {
+    const graphClient = Client.init({
+      // Init graph client
+      authProvider: async (done) => {
+        const token = await this.getAccessToken().catch((error) => {
+          done(error, null);
+        });
+        if (token) {
+          done(null, token.accessToken);
+        } else {
+          done('Could not get access token', null);
+        }
+      },
+    });
+
+    const members = await graphClient
+      .api(`/groups/${environment.AdGroupId}/members`)
+      .get();
+
+    const mappedMembers = members.value.map(
+      (item) =>
+        new User({
+          _id: item.id,
+          firstName: item.givenName,
+          lastName: item.surname,
+          email: item.mail,
+          phoneNumber: item.mobilePhone,
+          subscribed: [],
+          role: '',
+        })
+    );
+
+    this.userService.syncUsers(mappedMembers);
   }
 }

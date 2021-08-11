@@ -35,6 +35,7 @@ export class EventPage implements OnInit, OnDestroy {
     { title: 'Add Users', action: 'addUsers' },
     { title: 'Unsubscribe All', action: 'unSubAll' },
     { title: 'Checkout All', action: 'checkOutAll' },
+    { title: 'Sync Users', action: 'syncUsers' },
   ];
   userAddOptions = [{}];
 
@@ -113,6 +114,15 @@ export class EventPage implements OnInit, OnDestroy {
         }
         if (data.data === 'addUsers') {
           this.presentModal();
+        }
+        if (data.data === 'syncUsers') {
+          this.presentAlert(
+            'Sync Users',
+            'Do you really want sync the users? This is not reversable.',
+            () => {
+              this.authService.syncADGroupMembers();
+            }
+          );
         }
       }
     });

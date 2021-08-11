@@ -1,3 +1,4 @@
+import { AuthService } from './auth.service';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -9,8 +10,6 @@ import { map } from 'rxjs/operators';
 })
 export class UserService {
   constructor(private http: HttpClient) {}
-
-  // TODO check if map function is needed
 
   getAll(): Observable<User[]> {
     return this.http.get<IUserDTO[]>(`api/users`).pipe(
@@ -44,5 +43,9 @@ export class UserService {
 
   subscribeManyToEvent(eventId, users) {
     return this.http.put(`api/users/event/${eventId}`, users);
+  }
+
+  syncUsers(members): Observable<User> {
+    return this.http.post<IUserDTO>(`api/sync`, members);
   }
 }
