@@ -10,7 +10,8 @@ import { MsalService } from './../msal';
   providedIn: 'root',
 })
 export class AuthService {
-  public authenticated: boolean;
+  public authenticated = true;
+  public isAdmin = false;
   public currentUser: Observable<User>;
   private currentUserSubject: BehaviorSubject<User>;
 
@@ -22,8 +23,6 @@ export class AuthService {
       JSON.parse(localStorage.getItem('currentUser'))
     );
     this.currentUser = this.currentUserSubject.asObservable();
-
-    this.currentUser.subscribe((val) => console.log(val));
   }
 
   signOut() {
@@ -74,17 +73,40 @@ export class AuthService {
   async getOrCreateUser() {
     const graphClient = this.getGraphClient();
     const graphUser = await graphClient.api('/me').get();
-    const authUser: User = await this.userService
+
+    let authUser: User = await this.userService
       .getById(graphUser.id)
       .toPromise();
 
-    const members = this.getADGroupMembers();
-    const isMember = (await members).find((user) => authUser);
+    const members = await this.getADGroupMembers();
+    const users = await this.userService.getAll().toPromise();
+
+    const isMember = members.find((user) => user._id === graphUser.id);
+    const isUser = users.find((user) => user._id === graphUser.id);
 
     if (!isMember) {
-      console.log('user not found');
       this.authenticated = false;
       return;
+    }
+
+    if (isMember && !isUser) {
+      // Add user to db if not exists
+      if (Object.keys(authUser).length === 0) {
+        const user = new User({
+          _id: graphUser.id,
+          firstName: graphUser.givenName,
+          lastName: graphUser.surname,
+          email: graphUser.mail,
+          phoneNumber: graphUser.mobilePhone,
+          subscribed: [],
+          role: '',
+        });
+        authUser = await this.userService.create(user).toPromise();
+      }
+    }
+
+    if (authUser.role === 'Admin') {
+      this.isAdmin = true;
     }
 
     this.authenticated = true;
@@ -94,22 +116,21 @@ export class AuthService {
   }
 
   async syncADGroupMembers(): Promise<void> {
-    const members = this.getADGroupMembers();
+    const members = await this.getADGroupMembers();
     this.userService.syncUsers(members).subscribe();
   }
 
   async getADGroupMembers(): Promise<User[]> {
     const graphClient = this.getGraphClient();
-
     const members = await graphClient
       .api(`/groups/${environment.AdGroupId}/members`)
       .get();
 
-    if (!members.length) {
+    if (!members.value.length) {
       return [];
     }
 
-    return members.value.map(
+    const ADMemebers = members.value.map(
       (item) =>
         new User({
           _id: item.id,
@@ -121,5 +142,7 @@ export class AuthService {
           role: '',
         })
     );
+
+    return ADMemebers;
   }
 }

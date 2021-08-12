@@ -37,9 +37,7 @@ export class EventsPage implements OnInit, OnDestroy {
   async ngOnInit() {
     this.loading = true;
     this.user = await this.authService.getOrCreateUser();
-    if (this.user && this.user.role === 'Admin') {
-      this.isAdmin = true;
-    }
+    this.isAdmin = this.authService.isAdmin;
     this.getEvents();
   }
 

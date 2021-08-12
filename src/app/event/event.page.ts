@@ -59,14 +59,11 @@ export class EventPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loading = true;
+    this.isAdmin = this.authService.isAdmin;
+
     const sub = this.route.params.subscribe((result) => {
       this.getEvent(result.id);
     });
-
-    if (this.currentUser && this.currentUser.role === 'Admin') {
-      this.isAdmin = true;
-    }
-
     this.subscriptions.push(sub);
   }
 
