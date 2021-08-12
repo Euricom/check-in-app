@@ -2,19 +2,20 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { MsalGuard } from './shared/msal';
 import { AdminGuard } from './shared/guards/admin.guard';
+import { AuthGuard } from './shared/guards/auth.guard';
 
 const routes: Routes = [
   {
     path: '',
     redirectTo: 'events',
     pathMatch: 'full',
-    canActivate: [MsalGuard],
+    canActivate: [MsalGuard, AuthGuard],
   },
   {
     path: 'events',
     loadChildren: () =>
       import('./events/events.module').then((m) => m.EventsPageModule),
-    canActivate: [MsalGuard],
+    canActivate: [MsalGuard, AuthGuard],
   },
   {
     path: 'events/new',
@@ -22,7 +23,7 @@ const routes: Routes = [
       import('./event-create/event-create.module').then(
         (m) => m.EventCreatePageModule
       ),
-    canActivate: [MsalGuard, AdminGuard],
+    canActivate: [MsalGuard, AdminGuard, AuthGuard],
   },
   {
     path: 'events/edit/:id',
@@ -30,13 +31,13 @@ const routes: Routes = [
       import('./event-create/event-create.module').then(
         (m) => m.EventCreatePageModule
       ),
-    canActivate: [MsalGuard, AdminGuard],
+    canActivate: [MsalGuard, AdminGuard, AuthGuard],
   },
   {
     path: 'event/:id',
     loadChildren: () =>
       import('./event/event.module').then((m) => m.EventPageModule),
-    canActivate: [MsalGuard],
+    canActivate: [MsalGuard, AuthGuard],
   },
   {
     path: 'access-denied',

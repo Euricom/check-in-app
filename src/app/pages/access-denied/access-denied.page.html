@@ -1,9 +1,17 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>access-denied</ion-title>
+    <ion-title>Access Denied</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <div class="access-denied">
+    <div>
+      <h1>Access Denied 👮</h1>
+      <ion-label
+        >Please contact your admin if you should have access.</ion-label
+      >
+    </div>
+    <ion-button [routerLink]="'/'" style="margin-top: 40px">Go back</ion-button>
+  </div>
 </ion-content>

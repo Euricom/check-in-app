@@ -18,12 +18,12 @@ export class AuthService {
     private msalService: MsalService,
     private userService: UserService
   ) {
-    // TODO do check for authentication
-    // this.authenticated = this.msalService.getAccount() != null;
     this.currentUserSubject = new BehaviorSubject<User>(
       JSON.parse(localStorage.getItem('currentUser'))
     );
     this.currentUser = this.currentUserSubject.asObservable();
+
+    this.currentUser.subscribe((val) => console.log(val));
   }
 
   signOut() {
@@ -51,74 +51,65 @@ export class AuthService {
     return authResponse;
   }
 
+  getGraphClient(): Client {
+    return Client.init({
+      // Init graph client
+      authProvider: async (done) => {
+        const token = await this.getAccessToken().catch((error) => {
+          done(error, null);
+        });
+        if (token) {
+          done(null, token.accessToken);
+        } else {
+          done('Could not get access token', null);
+        }
+      },
+    });
+  }
+
   public get currentUserValue(): User {
     return this.currentUserSubject.value;
   }
 
   async getOrCreateUser() {
-    // if (!this.authenticated) {
-    //   return null;
-    // }
-
-    const graphClient = Client.init({
-      // Init graph client
-      authProvider: async (done) => {
-        const token = await this.getAccessToken().catch((error) => {
-          done(error, null);
-        });
-        if (token) {
-          done(null, token.accessToken);
-        } else {
-          done('Could not get access token', null);
-        }
-      },
-    });
-
+    const graphClient = this.getGraphClient();
     const graphUser = await graphClient.api('/me').get();
-
-    let authUser: User = await this.userService
+    const authUser: User = await this.userService
       .getById(graphUser.id)
       .toPromise();
 
-    // Add user to db if not exists
-    if (Object.keys(authUser).length === 0) {
-      const user = new User({
-        _id: graphUser.id,
-        firstName: graphUser.givenName,
-        lastName: graphUser.surname,
-        email: graphUser.mail,
-        phoneNumber: graphUser.mobilePhone,
-        subscribed: [],
-        role: '',
-      });
-      authUser = await this.userService.create(user).toPromise();
+    const members = this.getADGroupMembers();
+    const isMember = (await members).find((user) => authUser);
+
+    if (!isMember) {
+      console.log('user not found');
+      this.authenticated = false;
+      return;
     }
 
-    localStorage.setItem('currentUser', JSON.stringify(authUser));
+    this.authenticated = true;
+    localStorage.setItem('currentUser', JSON.stringify(authUser._id));
     this.currentUserSubject.next(authUser);
     return authUser;
   }
 
   async syncADGroupMembers(): Promise<void> {
-    const graphClient = Client.init({
-      // Init graph client
-      authProvider: async (done) => {
-        const token = await this.getAccessToken().catch((error) => {
-          done(error, null);
-        });
-        if (token) {
-          done(null, token.accessToken);
-        } else {
-          done('Could not get access token', null);
-        }
-      },
-    });
+    const members = this.getADGroupMembers();
+    this.userService.syncUsers(members).subscribe();
+  }
+
+  async getADGroupMembers(): Promise<User[]> {
+    const graphClient = this.getGraphClient();
 
     const members = await graphClient
       .api(`/groups/${environment.AdGroupId}/members`)
       .get();
 
-    const mappedMembers = members.value.map(
+    if (!members.length) {
+      return [];
+    }
+
+    return members.value.map(
       (item) =>
         new User({
           _id: item.id,
@@ -130,7 +121,5 @@ export class AuthService {
           role: '',
         })
     );
-
-    this.userService.syncUsers(mappedMembers).subscribe();
   }
 }
