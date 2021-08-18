@@ -50,16 +50,16 @@ export class EventPage implements OnInit, OnDestroy {
     public alertController: AlertController,
     public modalController: ModalController
   ) {
-    const sub = this.authService.currentUser.subscribe(
-      (result) => (this.currentUser = result)
-    );
+    const sub = this.authService.currentUser.subscribe((result) => {
+      this.currentUser = result;
+    });
 
+    this.isAdmin = this.authService.isAdmin;
     this.subscriptions.push(sub);
   }
 
   ngOnInit() {
     this.loading = true;
-    this.isAdmin = this.authService.isAdmin;
 
     const sub = this.route.params.subscribe((result) => {
       this.getEvent(result.id);

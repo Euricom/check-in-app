@@ -110,7 +110,7 @@ export class AuthService {
     }
 
     this.authenticated = true;
-    localStorage.setItem('currentUser', JSON.stringify(authUser._id));
+    localStorage.setItem('currentUser', JSON.stringify({ id: authUser._id }));
     this.currentUserSubject.next(authUser);
     return authUser;
   }

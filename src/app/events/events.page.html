@@ -45,19 +45,40 @@
             >
               {{event.checkedInCount}}/{{ event.totalCount}}
             </ion-badge>
-            <div class="event__extra" (click)="onCheckEvent(event)">
-              <ion-icon
-                color="primary"
-                size="large"
-                name="checkbox"
-                *ngIf="event.subscribed"
-              ></ion-icon>
-              <ion-icon
-                color="primary"
-                size="large"
-                name="square-outline"
-                *ngIf="!event.subscribed"
-              ></ion-icon>
+
+            <div [ngSwitch]="isAdmin">
+              <div *ngSwitchCase="false" class="event__extra">
+                <ion-icon
+                  color="primary"
+                  size="large"
+                  name="checkbox"
+                  *ngIf="event.subscribed"
+                ></ion-icon>
+                <ion-icon
+                  color="primary"
+                  size="large"
+                  name="remove-outline"
+                  *ngIf="!event.subscribed"
+                ></ion-icon>
+              </div>
+              <div
+                *ngSwitchDefault
+                class="event__extra"
+                (click)="onCheckEvent(event)"
+              >
+                <ion-icon
+                  color="primary"
+                  size="large"
+                  name="checkbox"
+                  *ngIf="event.subscribed"
+                ></ion-icon>
+                <ion-icon
+                  color="primary"
+                  size="large"
+                  name="square-outline"
+                  *ngIf="!event.subscribed"
+                ></ion-icon>
+              </div>
             </div>
           </div>
         </ion-label>
