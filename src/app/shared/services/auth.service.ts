@@ -89,7 +89,7 @@ export class AuthService {
       return;
     }
 
-    if (isMember && !isUser) {
+    if (!isUser) {
       // Add user to db if not exists
       if (Object.keys(authUser).length === 0) {
         const user = new User({
